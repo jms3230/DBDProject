@@ -30,7 +30,7 @@
 </div>
 
 ## 자료
-
+[프로젝트 계획 PPT](https://drive.google.com/drive/u/0/folders/17ca7VNNtwfffXQOK5RL3rLxDTOYegnmb)
 
 ## 참고
 + 해당 언리얼 파일은 Asset이 빠진 버전으로 정상 구동이 되지 않습니다
