@@ -24,6 +24,10 @@
 <img src="https://img.shields.io/badge/Discord-5865F2?style=flat-square&logo=discord&logoColor=white"/>
 </div>
 
+### Version Control
+<div>
+<img src="https://img.shields.io/badge/Perforce-4C00FF?style=flat-square&logo=perforce&logoColor=white"/>
+</div>
 
 ## 자료
 
