@@ -86,7 +86,7 @@ void UGA_Toolbox_Sabotage::ActivateAbility(const FGameplayAbilitySpecHandle Hand
 		GetCachedCurrentInteractable<AObj_Hook>()->GetSkeletalMeshComponent(),
 		FName(TEXT("socket_SurvivorAttach")),
 		GetSurvivorCharacterFromActorInfo());
-	LookAt(CachedCurrentInteractableActor);
+	LookAt(GetCachedCurrentInteractable<AActor>());
 	float SabotageSpeed = 1.0f;
 	USurvivorAbilitySystemComponent* SurvivorASC = GetSurvivorAbilitySystemComponentFromActorInfo();
 	if (SurvivorASC)

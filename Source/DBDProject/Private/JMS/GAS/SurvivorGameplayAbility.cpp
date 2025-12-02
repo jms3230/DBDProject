@@ -10,7 +10,7 @@
 #include "KMJ/Character/KillerCharacter.h"
 #include "Shared/DBDBlueprintFunctionLibrary.h"
 #include "Shared/Component/InteractorComponent.h"
-#include "Shared/Subsystem/DBDCharacterObserver.h"
+#include "Shared/Subsystem/DBDCharacterSubsystem.h"
 #include "Shared/UI/DBDWidgetComponent.h"
 
 
@@ -120,9 +120,9 @@ ASurvivorCharacter* USurvivorGameplayAbility::GetSurvivorCharacterFromActorInfo(
 
 AKillerCharacter* USurvivorGameplayAbility::GetKillerCharacterFromObserver() const
 {
-	if (UDBDCharacterObserver* CharacterObserver = GetWorld()->GetSubsystem<UDBDCharacterObserver>())
+	if (UDBDCharacterSubsystem* CharacterSubsystem = GetWorld()->GetSubsystem<UDBDCharacterSubsystem>())
 	{
-		return CharacterObserver->GetKiller();
+		return CharacterSubsystem->GetKiller();
 	}
 	return nullptr;
 }
@@ -134,17 +134,25 @@ ASurvivorItem* USurvivorGameplayAbility::GetEquippedItemFromActorInfo() const
 
 void USurvivorGameplayAbility::SetIgnoreOtherCharacterCollision()
 {
-	if (UDBDCharacterObserver* CharacterObserver = GetWorld()->GetSubsystem<UDBDCharacterObserver>())
+	if (UDBDCharacterSubsystem* CharacterSubsystem = GetWorld()->GetSubsystem<UDBDCharacterSubsystem>())
 	{
 		GetSurvivorCharacterFromActorInfo()->GetCapsuleComponent()->IgnoreActorWhenMoving(
-			CharacterObserver->GetKiller(), true);
-		for (ASurvivorCharacter* SurvivorCharacter : CharacterObserver->GetSurvivors())
+			CharacterSubsystem->GetKiller(), true);
+		for (ASurvivorCharacter* SurvivorCharacter : CharacterSubsystem->GetSurvivors())
 		{
 			GetSurvivorCharacterFromActorInfo()->GetCapsuleComponent()->IgnoreActorWhenMoving(SurvivorCharacter, true);
 		}
 		GetSurvivorCharacterFromActorInfo()->SetCollisionAndGravityEnabled(false);
 	}
 	bIsIgnoreCharacterSet = true;
+}
+
+void USurvivorGameplayAbility::LookAt(AActor* TargetActor) const
+{
+	if (TargetActor && K2_HasAuthority())
+	{
+		GetSurvivorCharacterFromActorInfo()->LookAtTargetActorFromServer(TargetActor);
+	}
 }
 
 void USurvivorGameplayAbility::LookAtKiller()

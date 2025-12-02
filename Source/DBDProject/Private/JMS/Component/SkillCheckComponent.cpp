@@ -63,9 +63,9 @@ void USkillCheckComponent::TickComponent(float DeltaTime, enum ELevelTick TickTy
 void USkillCheckComponent::TriggerOneShotSkillCheck(float Duration, float GoodWindowStart, float GoodWindowLength,
                                                     float GreatWindowLength)
 {
-	UGameplayStatics::PlaySound2D(GetWorld(), SkillCheckStartSound);
-	bIsSkillCheckDone = false;
 	SetComponentTickEnabled(true);
+	bIsSkillCheckDone = false;
+	UGameplayStatics::PlaySound2D(GetWorld(), SkillCheckStartSound);
 	CurrentTime = 0;
 	CachedDuration = Duration;
 	CachedGoodWindowStart = GoodWindowStart;

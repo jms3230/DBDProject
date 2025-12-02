@@ -4,7 +4,7 @@
 #include "JMS/Perk/Perk_Bond.h"
 
 #include "Shared/DBDDebugHelper.h"
-#include "Shared/Subsystem/DBDCharacterObserver.h"
+#include "Shared/Subsystem/DBDCharacterSubsystem.h"
 
 
 UPerk_Bond::UPerk_Bond()
@@ -20,13 +20,13 @@ void UPerk_Bond::OnServerSideInitialized()
 void UPerk_Bond::OnOwnerClientSideInitialized()
 {
 	Super::OnOwnerClientSideInitialized();
-		
-	UDBDCharacterObserver* CharacterObserver = GetWorld()->GetSubsystem<UDBDCharacterObserver>();
-	if (!CharacterObserver)
+
+	UDBDCharacterSubsystem* CharacterSubsystem = GetWorld()->GetSubsystem<UDBDCharacterSubsystem>();
+	if (!CharacterSubsystem)
 	{
-		//Debug::Print(TEXT("JMS11111:CharacterObserver is null"), 11111);
+		//Debug::Print(TEXT("JMS11111:CharacterSubsystem is null"), 11111);
 		return;
 	}
 
-	CharacterObserver->EnableSurvivorAuraWithDistanceAndTag(GetOuterAsDBDCharacter(), 1000);
+	CharacterSubsystem->EnableSurvivorAuraWithDistanceAndTag(this, GetOuterAsDBDCharacter(), 1000);
 }

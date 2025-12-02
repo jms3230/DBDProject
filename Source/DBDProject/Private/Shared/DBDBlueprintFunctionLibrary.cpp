@@ -229,7 +229,6 @@ FTransform UDBDBlueprintFunctionLibrary::MoveDBDCharacterToMeshSocket(USkeletalM
 	USkeletalMeshComponent* CharacterMesh = Character->GetMesh();
 	FVector MeshSocketLocation = Mesh->GetSocketLocation(MeshSocket);
 	FVector CharacterBaseLocation = CharacterMesh->GetSocketLocation(CharacterSocket);
-	FVector CharacterMeshOffset = Character->GetActorLocation() - CharacterBaseLocation;
 
 	Character->AddActorWorldOffset(MeshSocketLocation - CharacterBaseLocation);
 	return Character->GetTransform();

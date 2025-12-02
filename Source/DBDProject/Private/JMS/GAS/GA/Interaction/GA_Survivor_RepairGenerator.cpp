@@ -43,8 +43,13 @@ void UGA_Survivor_RepairGenerator::ActivateAbility(const FGameplayAbilitySpecHan
 
 	InteractStart();
 	EndOnInteractableTaskFinished();
-	LookAt(CachedCurrentInteractableActor);
+	LookAt(GetCachedCurrentInteractable<AActor>());
 
+	if (IsLocallyControlled())
+	{
+		SetRandomSkillCheckEnabledOnClient();
+	}
+	GetSurvivorCharacterFromActorInfo()->MoveEnabled(false);
 	if (K2_HasAuthority())
 	{
 		if (ASurvivorCharacter* Survivor = GetSurvivorCharacterFromActorInfo())
@@ -55,11 +60,6 @@ void UGA_Survivor_RepairGenerator::ActivateAbility(const FGameplayAbilitySpecHan
 			CurrentDirection = UDBDBlueprintFunctionLibrary::GetTagLastName(DirectionTag);
 			Survivor->PlaySyncMontageFromServer(Survivor->SurvivorMontageData->RepairGenerator, 1.f, CurrentDirection);
 		}
-	}
-	GetSurvivorCharacterFromActorInfo()->MoveEnabled(false);
-	if (IsLocallyControlled())
-	{
-		SetRandomSkillCheckEnabledOnClient();
 	}
 }
 

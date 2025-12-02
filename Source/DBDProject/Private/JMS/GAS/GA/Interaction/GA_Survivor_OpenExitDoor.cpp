@@ -36,7 +36,7 @@ void UGA_Survivor_OpenExitDoor::ActivateAbility(const FGameplayAbilitySpecHandle
 		return;
 	}
 	InteractStart();
-	GetSurvivorCharacterFromActorInfo()->LookAtTargetActorFromServer(CachedCurrentInteractableActor,-30);
+	GetSurvivorCharacterFromActorInfo()->LookAtTargetActorFromServer(GetCachedCurrentInteractable<AActor>(),-30);
 	EndOnInteractableTaskFinished();
 	GetSurvivorCharacterFromActorInfo()->MoveEnabled(false);
 

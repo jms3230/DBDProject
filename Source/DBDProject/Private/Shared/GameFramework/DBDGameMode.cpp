@@ -25,8 +25,8 @@
 #include "Shared/GameFramework/DBDGameInstance.h"
 #include "Shared/GameFramework/DBDPlayerState.h"
 #include "Shared/GameFramework/Lobby/LobbyPlayerState.h"
-#include "Shared/Subsystem/DBDAuraSubsystem.h"
-#include "Shared/Subsystem/DBDCharacterObserver.h"
+#include "Shared/Subsystem/DBDObjectAuraSubsystem.h"
+#include "Shared/Subsystem/DBDCharacterSubsystem.h"
 #include "Shared/Subsystem/DBDEndGameSubsystem.h"
 #include "Shared/Subsystem/DBDObjectObserver.h"
 #include "Shared/UI/DBDHUD.h"
@@ -325,7 +325,7 @@ void ADBDGameMode::CharacterInit()
 	int32 RequiredGeneratorRepairCount = DBDGameState->Survivors.Num() + 1;
 	DBDGameState->RequiredGeneratorRepairCount = RequiredGeneratorRepairCount;
 	
-	if (UDBDCharacterObserver* Observer = GetWorld()->GetSubsystem<UDBDCharacterObserver>())
+	if (UDBDCharacterSubsystem* Observer = GetWorld()->GetSubsystem<UDBDCharacterSubsystem>())
 	{
 		DBDGameState->Killer = Observer->GetKiller();
 		DBDGameState->Survivors = Observer->GetSurvivors();
@@ -376,7 +376,7 @@ void ADBDGameMode::OnKillerTagChange(FGameplayTag Tag, int32 Count)
 	FName LastTagName = UDBDBlueprintFunctionLibrary::GetTagLastName(Tag);
 	if (LastTagName == "Carrying")
 	{
-		UDBDAuraSubsystem* AuraSubsystem = GetWorld()->GetSubsystem<UDBDAuraSubsystem>();
+		UDBDObjectAuraSubsystem* AuraSubsystem = GetWorld()->GetSubsystem<UDBDObjectAuraSubsystem>();
 		if (!AuraSubsystem)
 		{
 			return;
@@ -511,7 +511,7 @@ void ADBDGameMode::OnGeneratorComplete(AActor* Object, AActor* Interactor)
 			{
 				ObjectObserver->ActivateExitDoors();
 			}
-			if (UDBDAuraSubsystem* AuraSystem = GetWorld()->GetSubsystem<UDBDAuraSubsystem>())
+			if (UDBDObjectAuraSubsystem* AuraSystem = GetWorld()->GetSubsystem<UDBDObjectAuraSubsystem>())
 			{
 				for (AObj_ExitDoor* ExitDoor : DBDGameState->ExitDoors)
 				{
@@ -542,7 +542,7 @@ void ADBDGameMode::OnGeneratorComplete(AActor* Object, AActor* Interactor)
 			
 			if (ADBDObject* Generator = Cast<ADBDObject>(Object))
 			{
-				if (UDBDAuraSubsystem* AuraSystem = GetWorld()->GetSubsystem<UDBDAuraSubsystem>())
+				if (UDBDObjectAuraSubsystem* AuraSystem = GetWorld()->GetSubsystem<UDBDObjectAuraSubsystem>())
 				{
 					for (ASurvivorCharacter* Survivor : DBDGameState->Survivors)
 					{
@@ -565,7 +565,7 @@ void ADBDGameMode::OnGeneratorInteract(AActor* Object, AActor* Interactor)
 	{
 		if (DBDGameState->Killer)
 		{
-			if (UDBDAuraSubsystem* AuraSystem = GetWorld()->GetSubsystem<UDBDAuraSubsystem>())
+			if (UDBDObjectAuraSubsystem* AuraSystem = GetWorld()->GetSubsystem<UDBDObjectAuraSubsystem>())
 			{
 				if (ADBDObject* Generator = Cast<ADBDObject>(Object))
 				{

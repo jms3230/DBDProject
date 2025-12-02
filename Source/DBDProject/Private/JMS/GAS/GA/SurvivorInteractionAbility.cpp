@@ -97,14 +97,6 @@ void USurvivorInteractionAbility::InteractStart()
 	}
 }
 
-void USurvivorInteractionAbility::LookAt(AActor* TargetActor) const
-{
-	if (TargetActor && K2_HasAuthority())
-	{
-		GetSurvivorCharacterFromActorInfo()->LookAtTargetActorFromServer(TargetActor);
-	}
-}
-
 void USurvivorInteractionAbility::EndOnInteractableTaskFinished() const
 {
 	if (!K2_HasAuthority())

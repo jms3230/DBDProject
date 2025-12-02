@@ -23,7 +23,7 @@ public:
 
 #pragma region Information:
 	UPROPERTY()
-	class UDBDCharacterObserver* CharacterObserver;
+	class UDBDCharacterSubsystem* CharacterSubsystem;
 	UPROPERTY()
 	class UDBDObjectObserver* ObjectObserver;
 

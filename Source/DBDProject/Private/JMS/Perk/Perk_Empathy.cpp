@@ -5,7 +5,7 @@
 
 #include "Shared/DBDDebugHelper.h"
 #include "Shared/DBDGameplayTags.h"
-#include "Shared/Subsystem/DBDCharacterObserver.h"
+#include "Shared/Subsystem/DBDCharacterSubsystem.h"
 #include "UObject/FastReferenceCollector.h"
 
 
@@ -22,12 +22,10 @@ void UPerk_Empathy::OnServerSideInitialized()
 void UPerk_Empathy::OnOwnerClientSideInitialized()
 {
 	Super::OnOwnerClientSideInitialized();
-	
-		///Debug::Print(TEXT("JMS11112: Empathy client init called"), GetOwnerRole(),11111);
-	UDBDCharacterObserver* CharacterObserver = GetWorld()->GetSubsystem<UDBDCharacterObserver>();
-	if (!CharacterObserver)
+	UDBDCharacterSubsystem* CharacterSubsystem = GetWorld()->GetSubsystem<UDBDCharacterSubsystem>();
+	if (!CharacterSubsystem)
 	{
-		//Debug::Print(TEXT("JMS11111:CharacterObserver is null"), 11111);
+		Debug::Print(TEXT("JMS: CharacterSubsystem is null"), -1);
 		return;
 	}
 	FGameplayTagContainer RequiredTags;
@@ -37,7 +35,6 @@ void UPerk_Empathy::OnOwnerClientSideInitialized()
 	BlockedTags.AddTag(DBDGameplayTags::Survivor_Status_Captured_Killer);
 	BlockedTags.AddTag(DBDGameplayTags::Survivor_Status_Captured_Hook);
 
-	CharacterObserver->EnableSurvivorAuraWithDistanceAndTag(GetOuterAsDBDCharacter(), 2000, RequiredTags, BlockedTags);
+	CharacterSubsystem->EnableSurvivorAuraWithDistanceAndTag(this, GetOuterAsDBDCharacter(), 2000, RequiredTags,
+	                                                         BlockedTags);
 }
-
-

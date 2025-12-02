@@ -1,14 +1,14 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "Shared/Subsystem/DBDAuraSubsystem.h"
+#include "Shared/Subsystem/DBDObjectAuraSubsystem.h"
 
 #include "MMJ/Object/Interactable/DBDObject.h"
 //#include "Shared/DataAsset/DBDMPC.h"
 #include "GameFramework/PlayerState.h"
 #include "Shared/GameFramework/DBDGameStateBase.h"
 
-void UDBDAuraSubsystem::Initialize(FSubsystemCollectionBase& Collection)
+void UDBDObjectAuraSubsystem::Initialize(FSubsystemCollectionBase& Collection)
 {
 	Super::Initialize(Collection);
 
@@ -26,7 +26,7 @@ void UDBDAuraSubsystem::Initialize(FSubsystemCollectionBase& Collection)
 	// }
 }
 
-void UDBDAuraSubsystem::SetAuraState(ADBDObject* Object, APlayerState* PlayerState, int32 StencilValue, float AuraDuration)
+void UDBDObjectAuraSubsystem::SetAuraState(ADBDObject* Object, APlayerState* PlayerState, int32 StencilValue, float AuraDuration)
 {
 	if (!Object) return;
 	if (!CastChecked<ADBDObject>(Object)) return;
@@ -67,13 +67,13 @@ void UDBDAuraSubsystem::SetAuraState(ADBDObject* Object, APlayerState* PlayerSta
 
 }
 
-void UDBDAuraSubsystem::SetAuraState(ADBDCharacter* Character, APlayerState* PlayerState, int32 StencilValue,
+void UDBDObjectAuraSubsystem::SetAuraState(ADBDCharacter* Character, APlayerState* PlayerState, int32 StencilValue,
 	float AuraDuration)
 {
 	// 추후 구현
 }
 
-void UDBDAuraSubsystem::UnSetAuraState(ADBDObject* Object, const FStencilMap StencilMap)
+void UDBDObjectAuraSubsystem::UnSetAuraState(ADBDObject* Object, const FStencilMap StencilMap)
 {
 	if (!Object) return;
 
@@ -84,12 +84,12 @@ void UDBDAuraSubsystem::UnSetAuraState(ADBDObject* Object, const FStencilMap Ste
 
 }
 
-void UDBDAuraSubsystem::UnSetAuraState(ADBDCharacter* Character, const FStencilMap StencilMap)
+void UDBDObjectAuraSubsystem::UnSetAuraState(ADBDCharacter* Character, const FStencilMap StencilMap)
 {
 	// 추후 구현
 }
 
-void UDBDAuraSubsystem::UnSetAuraState(ADBDObject* Object, APlayerState* PlayerState)
+void UDBDObjectAuraSubsystem::UnSetAuraState(ADBDObject* Object, APlayerState* PlayerState)
 {
 	if (!Object) return;
 
@@ -102,7 +102,7 @@ void UDBDAuraSubsystem::UnSetAuraState(ADBDObject* Object, APlayerState* PlayerS
 	}
 }
 
-void UDBDAuraSubsystem::UnSetAuraState(ADBDObject* Object, APlayerState* PlayerState, int32 StencilValue)
+void UDBDObjectAuraSubsystem::UnSetAuraState(ADBDObject* Object, APlayerState* PlayerState, int32 StencilValue)
 {
 	if (!Object) return;
 

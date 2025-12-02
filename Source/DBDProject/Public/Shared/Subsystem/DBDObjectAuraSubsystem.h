@@ -4,7 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Subsystems/WorldSubsystem.h"
-#include "DBDAuraSubsystem.generated.h"
+#include "DBDObjectAuraSubsystem.generated.h"
 
 
 class ADBDCharacter;
@@ -20,7 +20,7 @@ class ADBDPlayerState;
  * 
  */
 UCLASS()
-class DBDPROJECT_API UDBDAuraSubsystem : public UWorldSubsystem
+class DBDPROJECT_API UDBDObjectAuraSubsystem : public UWorldSubsystem
 {
 	GENERATED_BODY()
 

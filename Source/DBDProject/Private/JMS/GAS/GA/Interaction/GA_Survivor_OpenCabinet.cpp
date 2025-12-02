@@ -51,7 +51,7 @@ void UGA_Survivor_OpenCabinet::ActivateAbility(const FGameplayAbilitySpecHandle 
 		                                                                FName(TEXT("AttachKillerSocket")),
 		                                                                GetSurvivorCharacterFromActorInfo(),
 		                                                                FRotator(0, 90, 0));
-		LookAt(CachedCurrentInteractableActor);
+		LookAt(GetCachedCurrentInteractable<AActor>());
 		// 오브젝트 상태에 따른 애니메이션 실행
 		if (CachedCabinet->GetAbilitySystemComponent())
 		{

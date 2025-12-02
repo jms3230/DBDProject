@@ -54,7 +54,7 @@
 #include "Shared/ObjectPool/DBDObjectPool.h"
 #include "Shared/ObjectPool/DBDObjectPoolComponent.h"
 #include "Shared/ObjectPool/GenericObjectPool.h"
-#include "Shared/Subsystem/DBDCharacterObserver.h"
+#include "Shared/Subsystem/DBDCharacterSubsystem.h"
 #include "Shared/Subsystem/DBDObjectObserver.h"
 #include "Shared/UI/DBDHUD.h"
 #include "Shared/UI/DBDWidgetComponent.h"
@@ -208,11 +208,11 @@ void ASurvivorCharacter::BeginPlay()
 		}
 	}
 
-	
-	UDBDCharacterObserver* CharacterObserver = GetWorld()->GetSubsystem<UDBDCharacterObserver>();
-	if (!CharacterObserver)
+
+	UDBDCharacterSubsystem* CharacterSubsystem = GetWorld()->GetSubsystem<UDBDCharacterSubsystem>();
+	if (!CharacterSubsystem)
 	{
-		//Debug::Print(TEXT("JMS11: CharacterObserver is NULL!"), 11);
+		//Debug::Print(TEXT("JMS11: CharacterSubsystem is NULL!"), 11);
 	}
 	else
 	{
@@ -220,7 +220,7 @@ void ASurvivorCharacter::BeginPlay()
 		{
 			if (DBDPS->GetPlayerRole() == EPlayerRole::Killer)
 			{
-				CharacterObserver->EnableScratchMarkOnCurrentSurvivor(this);
+				CharacterSubsystem->EnableScratchMarkOnCurrentSurvivor(this);
 			}
 		}
 	}
@@ -236,7 +236,7 @@ void ASurvivorCharacter::BeginPlay()
 	// FTimerHandle InitItemTimerHandle;
 	// GetWorld()->GetTimerManager().SetTimer(InitItemTimerHandle, this,
 	//                                        &ASurvivorCharacter::InitializeStartItemAfterWaitForReplicated, 3.f, false);
-	
+
 	if (ADBDPlayerState* PS = GetDBDPlayerState())
 	{
 		if (PS->GetPlayerEndState() != EPlayerEndState::None)
@@ -277,32 +277,6 @@ void ASurvivorCharacter::BeginPlay()
 void ASurvivorCharacter::Tick(float DeltaSeconds)
 {
 	Super::Tick(DeltaSeconds);
-	FString DebugString = FString::Printf(TEXT("MaxWalkSpeed: %f"), GetCharacterMovement()->MaxWalkSpeed);
-	if (CurrentHook)
-	{
-		// DebugString += FString::Printf(
-		// 	TEXT(", socket_SurvivorAttach: %s"),
-		// 	*CurrentHook->GetSkeletalMeshComponent()->GetSocketLocation(FName(TEXT("SurvivorAttach"))).ToString());
-	}
-	if (HasAuthority())
-	{
-		Debug::DebugStringWithNetMode(this, DebugString, GetActorLocation() + FVector(0, 0, 100), DeltaSeconds);
-	}
-	else
-	{
-		Debug::DebugStringWithNetMode(this, DebugString, GetActorLocation() + FVector(0, 0, 120), DeltaSeconds);
-	}
-	// if (const FMotionWarpingTarget* Target = DBDMotionWarpingComponent->FindWarpTarget(FName(TEXT("SurvivorHookIn"))))
-	// {
-	// 	FVector CharLineStart = GetActorLocation();
-	// 	FVector CharLineEnd = CharLineStart + GetActorForwardVector() * 100;
-	// 	DrawDebugSphere(GetWorld(), CharLineEnd, 20, 12, FColor::Green, false, DeltaSeconds * 2);
-	// 	DrawDebugLine(GetWorld(), CharLineStart, CharLineEnd, FColor::Green, false, DeltaSeconds * 2);
-	// 	FVector LineStart = Target->Component->GetSocketLocation(Target->BoneName);
-	// 	FVector LineEnd = LineStart + Target->Component->GetSocketRotation(Target->BoneName).Vector() * 100;
-	// 	DrawDebugLine(GetWorld(), LineStart, LineEnd, FColor::Red, false, DeltaSeconds * 2);
-	// 	DrawDebugSphere(GetWorld(), LineEnd, 20, 12, FColor::Red, false, DeltaSeconds * 2);
-	// }
 }
 
 void ASurvivorCharacter::HealProgressChanged(const FOnAttributeChangeData& OnAttributeChangeData)
@@ -433,7 +407,7 @@ void ASurvivorCharacter::EscapeTagUpdate(const FGameplayTag Tag, int32 NewCount)
 		GetCharacterMovement()->MovementMode = MOVE_None;
 		GetCharacterMovement()->StopActiveMovement();
 	}
-	
+
 	if (EquippedItem)
 	{
 		EquippedItem->SetActorHiddenInGame(true);
@@ -1028,7 +1002,7 @@ void ASurvivorCharacter::InitializeEquippedItem(FSurvivorItemInstanceInfo Initia
 	}
 	else
 	{
-		//Debug::Print(TEXT("JMS112 : SurvivorItemAddonDB Load Failed"), 111);
+		Debug::Print(TEXT("JMS112 : SurvivorItemAddonDB Load Failed"), 112);
 	}
 
 	EquipItem(SpawnedItem);
@@ -1063,14 +1037,14 @@ void ASurvivorCharacter::ServerSideInit()
 	{
 		InitializeEquippedItem(InitialItemInfo);
 	}
-	UDBDCharacterObserver* CharacterObserver = GetWorld()->GetSubsystem<UDBDCharacterObserver>();
-	if (!CharacterObserver)
+	UDBDCharacterSubsystem* CharacterSubsystem = GetWorld()->GetSubsystem<UDBDCharacterSubsystem>();
+	if (!CharacterSubsystem)
 	{
-		//Debug::Print(TEXT("JMS11: CharacterObserver is NULL!"), 11);
+		Debug::Print(TEXT("JMS11: CharacterSubsystem is NULL!"), 11);
 	}
 	else
 	{
-		CharacterObserver->RegisterSurvivor(this);
+		CharacterSubsystem->RegisterSurvivor(this);
 	}
 }
 
@@ -1088,14 +1062,14 @@ void ASurvivorCharacter::ClientSideInit()
 	// {
 	// 	TempPrototypeWidget->AddToViewport();
 	// }
-	UDBDCharacterObserver* CharacterObserver = GetWorld()->GetSubsystem<UDBDCharacterObserver>();
-	if (!CharacterObserver)
+	UDBDCharacterSubsystem* CharacterSubsystem = GetWorld()->GetSubsystem<UDBDCharacterSubsystem>();
+	if (!CharacterSubsystem)
 	{
-		//Debug::Print(TEXT("JMS11: CharacterObserver is NULL!"), 11);
+		//Debug::Print(TEXT("JMS11: CharacterSubsystem is NULL!"), 11);
 	}
 	else
 	{
-		CharacterObserver->RegisterSurvivor(this);
+		CharacterSubsystem->RegisterSurvivor(this);
 	}
 }
 
@@ -1241,9 +1215,9 @@ void ASurvivorCharacter::OnSprintStarted()
 
 void ASurvivorCharacter::MoveToKiller(FName KillerSocket)
 {
-	if (UDBDCharacterObserver* CharacterObserver = GetWorld()->GetSubsystem<UDBDCharacterObserver>())
+	if (UDBDCharacterSubsystem* CharacterSubsystem = GetWorld()->GetSubsystem<UDBDCharacterSubsystem>())
 	{
-		if (AKillerCharacter* Killer = CharacterObserver->GetKiller())
+		if (AKillerCharacter* Killer = CharacterSubsystem->GetKiller())
 		{
 			UDBDBlueprintFunctionLibrary::MoveDBDCharacterToMeshSocket(Killer->GetMesh(), KillerSocket, this);
 		}
@@ -1273,26 +1247,26 @@ void ASurvivorCharacter::Anim_DisableMoveEnd()
 
 void ASurvivorCharacter::SetMoveIgnoreKiller(bool bIgnore)
 {
-	UDBDCharacterObserver* CharacterObserver = GetWorld()->GetSubsystem<UDBDCharacterObserver>();
-	if (CharacterObserver)
+	UDBDCharacterSubsystem* CharacterSubsystem = GetWorld()->GetSubsystem<UDBDCharacterSubsystem>();
+	if (CharacterSubsystem)
 	{
 		if (bIgnore)
 		{
-			MoveIgnoreActorAdd(CharacterObserver->GetKiller());
+			MoveIgnoreActorAdd(CharacterSubsystem->GetKiller());
 		}
 		else
 		{
-			MoveIgnoreActorRemove(CharacterObserver->GetKiller());
+			MoveIgnoreActorRemove(CharacterSubsystem->GetKiller());
 		}
 	}
 }
 
 void ASurvivorCharacter::SetMoveIgnoreSurvivors(bool bIgnore)
 {
-	UDBDCharacterObserver* CharacterObserver = GetWorld()->GetSubsystem<UDBDCharacterObserver>();
-	if (CharacterObserver)
+	UDBDCharacterSubsystem* CharacterSubsystem = GetWorld()->GetSubsystem<UDBDCharacterSubsystem>();
+	if (CharacterSubsystem)
 	{
-		for (ASurvivorCharacter* Survivor : CharacterObserver->GetSurvivors())
+		for (ASurvivorCharacter* Survivor : CharacterSubsystem->GetSurvivors())
 		{
 			if (Survivor != this)
 			{
@@ -1319,11 +1293,11 @@ void ASurvivorCharacter::OnRep_IsMoveEnabled(bool OldIsMoveEnabled)
 
 void ASurvivorCharacter::PlayHeartBeatIfKillerNearby()
 {
-	if (UDBDCharacterObserver* CharacterObserver = GetWorld()->GetSubsystem<UDBDCharacterObserver>())
+	if (UDBDCharacterSubsystem* CharacterSubsystem = GetWorld()->GetSubsystem<UDBDCharacterSubsystem>())
 	{
-		if (CharacterObserver->GetKiller())
+		if (CharacterSubsystem->GetKiller())
 		{
-			if (CharacterObserver->GetKiller()->GetDistanceTo(this) < 1000.f)
+			if (CharacterSubsystem->GetKiller()->GetDistanceTo(this) < 1000.f)
 			{
 				UGameplayStatics::PlaySound2D(GetWorld(), HeartBeatSound, HeartBeatVolume);
 				if (HeartBeatVolume < 1.f)

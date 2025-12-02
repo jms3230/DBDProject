@@ -21,7 +21,7 @@
 #include "Shared/GameFramework/DBDGameMode.h"
 #include "Shared/GameFramework/DBDPlayerState.h"
 #include "Shared/Perk/PerkComponent.h"
-#include "Shared/Subsystem/DBDCharacterObserver.h"
+#include "Shared/Subsystem/DBDCharacterSubsystem.h"
 #include "Shared/UI/DBDWidgetComponent.h"
 
 ADBDCharacter::ADBDCharacter()
@@ -523,10 +523,10 @@ void ADBDCharacter::InitPerkOnClient()
 
 void ADBDCharacter::EnableScratchMarkToCurrentClientSurvivor()
 {
-	UDBDCharacterObserver* CharacterObserver = GetWorld()->GetSubsystem<UDBDCharacterObserver>();
-	if (CharacterObserver)
+	UDBDCharacterSubsystem* CharacterSubsystem = GetWorld()->GetSubsystem<UDBDCharacterSubsystem>();
+	if (CharacterSubsystem)
 	{
-		CharacterObserver->EnableScratchMarkOnEverySurvivor();
+		CharacterSubsystem->EnableScratchMarkOnEverySurvivor();
 	}
 }
 

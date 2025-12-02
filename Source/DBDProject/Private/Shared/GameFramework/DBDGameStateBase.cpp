@@ -20,7 +20,7 @@
 #include "Shared/Component/InteractableComponent.h"
 #include "Shared/Controller/DBDPlayerController.h"
 #include "Shared/GameFramework/DBDPlayerState.h"
-#include "Shared/Subsystem/DBDCharacterObserver.h"
+#include "Shared/Subsystem/DBDCharacterSubsystem.h"
 #include "Shared/Subsystem/DBDEndGameSubsystem.h"
 #include "Shared/Subsystem/DBDObjectObserver.h"
 #include "Shared/UI/DBDHUD.h"
@@ -160,9 +160,9 @@ void ADBDGameStateBase::BeginPlay()
 	{
 		// 옵저버 설정
 		{
-			if (UDBDCharacterObserver* Observer = GetWorld()->GetSubsystem<UDBDCharacterObserver>())
+			if (UDBDCharacterSubsystem* Observer = GetWorld()->GetSubsystem<UDBDCharacterSubsystem>())
 			{
-				CharacterObserver = Observer;
+				CharacterSubsystem = Observer;
 			}
 			// 오브젝트
 			if (UDBDObjectObserver* Observer = GetWorld()->GetSubsystem<UDBDObjectObserver>())

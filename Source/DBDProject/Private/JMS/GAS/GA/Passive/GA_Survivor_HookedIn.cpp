@@ -17,7 +17,7 @@
 #include "Shared/DBDBlueprintFunctionLibrary.h"
 #include "Shared/DBDGameplayTags.h"
 #include "Shared/Component/DBDMotionWarpingComponent.h"
-#include "Shared/Subsystem/DBDCharacterObserver.h"
+#include "Shared/Subsystem/DBDCharacterSubsystem.h"
 
 
 UGA_Survivor_HookedIn::UGA_Survivor_HookedIn()

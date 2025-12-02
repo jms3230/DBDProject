@@ -70,6 +70,7 @@ private:
 #pragma region Transform Settings
 
 protected:
+	void LookAt(AActor* TargetActor) const;
 	void LookAtKiller();
 	void AttachToKiller(FName SocketName);
 #pragma endregion

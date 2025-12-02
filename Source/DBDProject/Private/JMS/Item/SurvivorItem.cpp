@@ -70,8 +70,10 @@ void ASurvivorItem::OnEquipItem()
 	// ItemAbilitySystemComponent->SetNumericAttributeBase(UItemAttributeSet::GetMaxChargeAttribute(), MaxCharge);
 	// ItemAbilitySystemComponent->SetNumericAttributeBase(UItemAttributeSet::GetCurrentChargeAttribute(),
 	//                                                     CurrentCharge);
-	GetOwnerSurvivorAbilitySystemComponent()->SetNumericAttributeBase(USurvivorAttributeSet::GetMaxItemChargeAttribute(),MaxCharge);
-	GetOwnerSurvivorAbilitySystemComponent()->SetNumericAttributeBase(USurvivorAttributeSet::GetCurrentItemChargeAttribute(),CurrentCharge);
+	GetOwnerSurvivorAbilitySystemComponent()->SetNumericAttributeBase(
+		USurvivorAttributeSet::GetMaxItemChargeAttribute(), MaxCharge);
+	GetOwnerSurvivorAbilitySystemComponent()->SetNumericAttributeBase(
+		USurvivorAttributeSet::GetCurrentItemChargeAttribute(), CurrentCharge);
 	ItemInteractableComponent->SetInteractable(false);
 	IAbilitySystemInterface* ASI = Cast<IAbilitySystemInterface>(GetOwner());
 	if (ASI)
@@ -123,14 +125,14 @@ void ASurvivorItem::OnDropItem()
 		Addon2->OnUnEquip();
 	}
 
-	MaxCharge = GetOwnerSurvivorAbilitySystemComponent()->GetNumericAttributeBase(USurvivorAttributeSet::GetMaxItemChargeAttribute());
-	CurrentCharge = GetOwnerSurvivorAbilitySystemComponent()->GetNumericAttributeBase(USurvivorAttributeSet::GetCurrentItemChargeAttribute());
-	if (HasAuthority())
+	MaxCharge = GetOwnerSurvivorAbilitySystemComponent()->GetNumericAttributeBase(
+		USurvivorAttributeSet::GetMaxItemChargeAttribute());
+	CurrentCharge = GetOwnerSurvivorAbilitySystemComponent()->GetNumericAttributeBase(
+		USurvivorAttributeSet::GetCurrentItemChargeAttribute());
+
+	for (FGameplayAbilitySpecHandle GrantedSpecHandle : GrantedSpecHandles)
 	{
-		for (FGameplayAbilitySpecHandle GrantedSpecHandle : GrantedSpecHandles)
-		{
-			GetOwnerSurvivorAbilitySystemComponent()->ClearAbility(GrantedSpecHandle);
-		}
+		GetOwnerSurvivorAbilitySystemComponent()->ClearAbility(GrantedSpecHandle);
 	}
 }
 

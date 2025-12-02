@@ -6,7 +6,7 @@
 #include "AbilitySystemComponent.h"
 #include "Shared/DBDDebugHelper.h"
 #include "Shared/Character/DBDCharacter.h"
-#include "Shared/Subsystem/DBDCharacterObserver.h"
+#include "Shared/Subsystem/DBDCharacterSubsystem.h"
 
 
 UPerk_ProveThyself::UPerk_ProveThyself()
@@ -17,14 +17,13 @@ UPerk_ProveThyself::UPerk_ProveThyself()
 void UPerk_ProveThyself::OnServerSideInitialized()
 {
 	Super::OnServerSideInitialized();
-	UDBDCharacterObserver* CharacterObserver = GetWorld()->GetSubsystem<UDBDCharacterObserver>();
-	if (!CharacterObserver)
+	UDBDCharacterSubsystem* CharacterSubsystem = GetWorld()->GetSubsystem<UDBDCharacterSubsystem>();
+	if (!CharacterSubsystem)
 	{
-		//Debug::Print(TEXT("JMS11111:CharacterObserver is null"), 11111);
+		Debug::Print(TEXT("JMS: CharacterSubsystem is null"), -1);
 		return;
 	}
-	
-	CharacterObserver->ApplyGEWithSurvivorWithinDistance(GetOuterAsDBDCharacter(), 400,
+	CharacterSubsystem->ApplyGEWithSurvivorWithinDistance(GetOuterAsDBDCharacter(), 400,
 	                                                     ProveThyselfEffect);
 }
 

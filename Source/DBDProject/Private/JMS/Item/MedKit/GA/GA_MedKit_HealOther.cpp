@@ -72,7 +72,7 @@ void UGA_MedKit_HealOther::ActivateAbility(const FGameplayAbilitySpecHandle Hand
 			                                                  DBDGameplayTags::Survivor_Status_BeingHealed);
 		}
 	}
-	LookAt(CachedCurrentInteractableActor);
+	LookAt(GetCachedCurrentInteractable<AActor>());
 	if (HasAuthorityOrPredictionKey(ActorInfo, &ActivationInfo))
 	{
 		GetAbilitySystemComponentFromActorInfo()->PlayMontage(this, ActivationInfo,
@@ -103,7 +103,7 @@ void UGA_MedKit_HealOther::EndAbility(const FGameplayAbilitySpecHandle Handle,
 	{
 		GetAnimInstance()->StopAllMontages(0.1f);
 	}
-	if (K2_HasAuthority() && CachedCurrentInteractableActor)
+	if (K2_HasAuthority() && GetCachedCurrentInteractable<AActor>())
 	{
 		if (ASurvivorCharacter* CachedSurvivor = GetCachedCurrentInteractable<ASurvivorCharacter>())
 		{

@@ -28,12 +28,9 @@ UInteractorComponent::UInteractorComponent()
 {
 	// Set this component to be initialized when the game starts, and to be ticked every frame.  You can turn these features
 	// off to improve performance if you don't need them.
-	PrimaryComponentTick.bCanEverTick = true;
-
+	PrimaryComponentTick.bCanEverTick = false;
 	SphereRadius = 150.f;
 	SetIsReplicatedByDefault(true);
-	SetCollisionProfileName(FName("NoCollision"));
-
 	bIsSearchingEnabled = true;
 	SearchInterval = 0.1f;
 	SearchRadius = 150.f;
@@ -45,18 +42,16 @@ UInteractorComponent::UInteractorComponent()
 void UInteractorComponent::BeginPlay()
 {
 	Super::BeginPlay();
-
+	SetCollisionProfileName(FName("NoCollision"));
 	if (GetOwner()->HasAuthority())
 	{
-		GetWorld()->GetTimerManager().SetTimer(SearchTimerHandle, this, &UInteractorComponent::CheckNearbyInteractable,
-		                                       SearchInterval, true);
+		GetWorld()->GetTimerManager().SetTimer(
+			SearchTimerHandle,
+			this,
+			&UInteractorComponent::CheckNearbyInteractable,
+			SearchInterval,
+			true);
 	}
-}
-
-void UInteractorComponent::TickComponent(float DeltaTime, enum ELevelTick TickType,
-                                         FActorComponentTickFunction* ThisTickFunction)
-{
-	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 }
 
 void UInteractorComponent::CheckNearbyInteractable()
@@ -82,6 +77,7 @@ void UInteractorComponent::CheckNearbyInteractable()
 		RegisterOverlappedInteractable(nullptr);
 		return;
 	}
+	IInteractable* Candidate = nullptr;
 	for (const FHitResult& HitResult : HitResults)
 	{
 		IInteractable* Interactable = Cast<IInteractable>(HitResult.GetActor());
@@ -92,16 +88,12 @@ void UInteractorComponent::CheckNearbyInteractable()
 			float DistanceToActor = (HitActorLocation - OwnerLocation).Size();
 			if (DistanceToActor < ClosestDistance)
 			{
-				RegisterOverlappedInteractable(Interactable);
+				Candidate = Interactable;
 				ClosestDistance = DistanceToActor;
 			}
 		}
 	}
-	// HitResult는 있으나 Interactable이 없는 경우
-	if (ClosestDistance == MAX_FLT)
-	{
-		RegisterOverlappedInteractable(nullptr);
-	}
+	RegisterOverlappedInteractable(Candidate);
 }
 
 void UInteractorComponent::RegisterOverlappedInteractable(IInteractable* Interactable)
@@ -111,7 +103,7 @@ void UInteractorComponent::RegisterOverlappedInteractable(IInteractable* Interac
 	{
 		Client_CurrentInteractableChanged(Cast<AActor>(Interactable));
 	}
-		
+
 	CurrentInteractable = Interactable;
 	// JMS: 서버에서만 실행되므로 단순화했습니다.
 	AActor* NewInteractableActor = CurrentInteractable
@@ -209,6 +201,7 @@ void UInteractorComponent::UpdateTag()
 			CurrentInteractable->GetInteractableComponent()->InteractableTag);
 	}
 }
+
 //
 // void UInteractorComponent::OnRep_CurrentInteractableActor()
 // {

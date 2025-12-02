@@ -6,7 +6,7 @@
 #include "ActiveGameplayEffectHandle.h"
 #include "GameplayTagContainer.h"
 #include "Subsystems/WorldSubsystem.h"
-#include "DBDCharacterObserver.generated.h"
+#include "DBDCharacterSubsystem.generated.h"
 
 class UGameplayEffect;
 struct FGameplayTagContainer;
@@ -18,8 +18,24 @@ class ADBDCharacter;
 class AKillerCharacter;
 class ASurvivorCharacter;
 
+USTRUCT()
+struct FDBDCharacterAuraInfo
+{
+	GENERATED_BODY()
+
+	UPROPERTY()
+	ADBDCharacter* DBDCharacter;
+	UPROPERTY()
+	TSet<UObject*> AuraInstigators;
+	int32 StencilValue;
+	
+	bool operator==(const FDBDCharacterAuraInfo& right) const;
+	FDBDCharacterAuraInfo(ADBDCharacter* InDBDCharacter);
+	FDBDCharacterAuraInfo() = default;
+};
+
 UCLASS()
-class DBDPROJECT_API UDBDCharacterObserver : public UWorldSubsystem
+class DBDPROJECT_API UDBDCharacterSubsystem : public UWorldSubsystem
 {
 	GENERATED_BODY()
 
@@ -38,7 +54,7 @@ public:
 	TArray<ASurvivorCharacter*> GetSurvivors();
 
 	// JMS : 거리와 조건 태그들을 활용해 생존자의 오라를 활성화(EX: SelfCare, Bond)
-	void EnableSurvivorAuraWithDistanceAndTag(ADBDCharacter* EffectOwner, float Distance,
+	void EnableSurvivorAuraWithDistanceAndTag(UObject* AuraInstigator, ADBDCharacter* EffectOwner, float Distance,
 	                                          FGameplayTagContainer RequiredTags = FGameplayTagContainer(),
 	                                          FGameplayTagContainer BlockedTags = FGameplayTagContainer());
 	// JMS : 일정 거리 내의 생존자 숫자에 따라 GameplayEffect 레벨을 다르게 하여 EffectTarget에게 적용(EX: Prove Thyself)
@@ -55,21 +71,28 @@ public:
 	void BindingPlayerCharacter(ADBDCharacter* Player);
 	void UnBindingPlayerCharacter(ADBDCharacter* Player);
 
-	
-protected:
+private:
 	UPROPERTY()
 	TObjectPtr<AKillerCharacter> Killer;
+	TArray<FDBDCharacterAuraInfo> CharacterAuraInfoContainer;
 	UPROPERTY()
 	TArray<TObjectPtr<ASurvivorCharacter>> Survivors;
-	
+#pragma region CharacterAuraSystem
+	void RequestAuraRefresh();
+	void RefreshAura();
+	float AuraRefreshInterval = 0.05f;
+	bool bIsAuraRefreshing = false;
+	FTimerHandle AuraRefreshTimerHandle;
+#pragma endregion
 	// JMS : EnableSurvivorAuraWithDistanceAndTag 구현을 위한 멤버들
-	float AuraRefreshInterval = 0.1f;
-	TArray<FTimerHandle> AuraTimerHandles;
-	void ShowAuraAfterCheckSurvivorDistanceAndTag(ADBDCharacter* EffectOwner, float Distance,
+
+	TArray<FTimerHandle> AuraConditionTimerHandles;
+	float AuraConditionCheckInterval = 0.1f;
+	void ShowAuraAfterCheckSurvivorDistanceAndTag(UObject* AuraInstigator, ADBDCharacter* EffectOwner, float Distance,
 	                                              FGameplayTagContainer RequiredTags,
 	                                              FGameplayTagContainer BlockedTags);
 	// JMS : ~EnableSurvivorAuraWithDistanceAndTag 구현을 위한 멤버들
-	
+
 	// JMS : ApplyGEWithSurvivorWithinDistance 구현을 위한 멤버들
 	float ApplyGEToSelfDistanceCheckInterval = 0.1f;
 	TArray<FTimerHandle> DistanceCheckTimerHandles;
@@ -78,16 +101,17 @@ protected:
 
 	// JMS : ApplyGEToSurvivorsWithinDistance 구현을 위한 멤버들
 	float ApplyGEToOthersDistanceCheckInterval = 0.1f;
-	void CheckDistanceAndRefreshEffectToOthers(ADBDCharacter* EffectOwner, float Distance, TSubclassOf<UGameplayEffect> GE);
+	void CheckDistanceAndRefreshEffectToOthers(ADBDCharacter* EffectOwner, float Distance,
+	                                           TSubclassOf<UGameplayEffect> GE);
 	// JMS : ~ApplyGEToSurvivorsWithinDistance 구현을 위한 멤버들
 
 	// JMS : 발자국 구현
-	
+
 	FTimerHandle LeaveScratchMarkTimerHandle;
 	FTimerDelegate LeaveScratchMarkTimerDelegate;
 	float LeaveScratchMarkInterval = 0.7f;
 	UFUNCTION()
-	void LeaveScratchMarkOnSurvivorSprint(ASurvivorCharacter* Survivor,int32 NewCount);
+	void LeaveScratchMarkOnSurvivorSprint(ASurvivorCharacter* Survivor, int32 NewCount);
 	void SpawnScratchMarkOnSurvivorLocation(ASurvivorCharacter* Survivor);
 	// JMS : ~발자국 구현
 };

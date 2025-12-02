@@ -29,7 +29,7 @@ public:
 	UPROPERTY(EditAnywhere, meta = (BindWidget))
 	UImage* ZeroProgressMarking;
 
-	// 타이머 UI의 이미지를 bIsSlow값에 따라 변경 bIsSlow = 타이머가 느려졌는지 판단 -> CharacterObserver에서 호출
+	// 타이머 UI의 이미지를 bIsSlow값에 따라 변경 bIsSlow = 타이머가 느려졌는지 판단 -> CharacterSubsystem에서 호출
 	UFUNCTION()
 	void ChangeProgressBar(bool bIsSlow);
 

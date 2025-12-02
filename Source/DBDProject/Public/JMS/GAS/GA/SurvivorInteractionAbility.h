@@ -33,13 +33,9 @@ protected:
 protected:
 	UFUNCTION(BlueprintPure, Category="GA")
 	UInteractorComponent* GetInteractorComponentFromActorInfo() const;
-	UPROPERTY()
-	UInteractorComponent* CachedInteractorComponent;
-	UPROPERTY()
-	AActor* CachedCurrentInteractableActor;
 
 	template <typename T>
-	T* GetCachedCurrentInteractable()
+	T* GetCachedCurrentInteractable() const
 	{
 		if (CachedCurrentInteractableActor)
 		{
@@ -59,9 +55,12 @@ protected:
 	}
 
 	void InteractStart();
-	void LookAt(AActor* TargetActor) const;
-	
 	void EndOnInteractableTaskFinished() const;
+private:
+	UPROPERTY()
+	UInteractorComponent* CachedInteractorComponent;
+	UPROPERTY()
+	AActor* CachedCurrentInteractableActor;
 	bool bInteractStarted = false;
 
 #pragma endregion
@@ -70,17 +69,19 @@ protected:
 protected:
 	UFUNCTION(BlueprintCallable, Category="SurvivorInteractionAbility")
 	void SetRandomSkillCheckEnabledOnClient(float Frequency = 1.0f);
-	void SetSkillCheckTimer(float Frequency);
-	void PlaySkillCheck();
 	UFUNCTION()
 	void OnSkillCheckEnd(ESkillCheckResult Result);
 	virtual void OnSkillCheckBad();
 	UFUNCTION(Server, Reliable)
 	virtual void Server_SendSkillCheckResult(ESkillCheckResult Result);
+private:
+	void SetSkillCheckTimer(float Frequency);
+	void PlaySkillCheck();
 	FTimerHandle SkillCheckTimerHandle;
 	FDelegateHandle SkillCheckEndDelegateHandle;
 	UPROPERTY()
 	USkillCheckComponent* CachedSkillCheckComponent;
+	
 #pragma endregion
 	UFUNCTION()
 	virtual void OnGetHit(FGameplayEventData Payload);

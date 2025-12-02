@@ -26,8 +26,8 @@
 #include "Shared/Component/InteractorComponent.h"
 #include "Shared/Controller/DBDPlayerController.h"
 #include "Shared/GameFramework/DBDPlayerState.h"
-#include "Shared/Subsystem/DBDAuraSubsystem.h"
-#include "Shared/Subsystem/DBDCharacterObserver.h"
+#include "Shared/Subsystem/DBDObjectAuraSubsystem.h"
+#include "Shared/Subsystem/DBDCharacterSubsystem.h"
 #include "Shared/Subsystem/DBDObjectObserver.h"
 #include "Slate/SGameLayerManager.h"
 
@@ -96,14 +96,14 @@ void AKillerCharacter::ServerSideInit()
 		}
 	}
 	// JMS: ��버� �버/�라�언각각 관리해줘야 �서 �기추�습�다.
-	UDBDCharacterObserver* CharacterObserver = GetWorld()->GetSubsystem<UDBDCharacterObserver>();
-	if (!CharacterObserver)
+	UDBDCharacterSubsystem* CharacterSubsystem = GetWorld()->GetSubsystem<UDBDCharacterSubsystem>();
+	if (!CharacterSubsystem)
 	{
-		//Debug::Print(TEXT("JMS11: CharacterObserver is NULL!"), 11);
+		//Debug::Print(TEXT("JMS11: CharacterSubsystem is NULL!"), 11);
 	}
 	else
 	{
-		CharacterObserver->RegisterKiller(this);
+		CharacterSubsystem->RegisterKiller(this);
 	}
 }
 
@@ -121,15 +121,15 @@ void AKillerCharacter::ClientSideInit()
 		//UE_LOG(LogTemp, Error, TEXT("KillerCharacter::ClientSideInit: KillerAnimInstance Is Null"));
 	}
 	// JMS: ��버� �버/�라�언각각 관리해줘야 �서 �기추�습�다.
-	UDBDCharacterObserver* CharacterObserver = GetWorld()->GetSubsystem<UDBDCharacterObserver>();
-	if (!CharacterObserver)
+	UDBDCharacterSubsystem* CharacterSubsystem = GetWorld()->GetSubsystem<UDBDCharacterSubsystem>();
+	if (!CharacterSubsystem)
 	{
-		//Debug::Print(TEXT("JMS11: CharacterObserver is NULL!"), 11);
+		//Debug::Print(TEXT("JMS11: CharacterSubsystem is NULL!"), 11);
 	}
 	else
 	{
-		CharacterObserver->RegisterKiller(this);
-		CharacterObserver->PrintAllCharacter();
+		CharacterSubsystem->RegisterKiller(this);
+		CharacterSubsystem->PrintAllCharacter();
 	}
 }
 
@@ -469,7 +469,7 @@ void AKillerCharacter::OnAura_Hook(const FGameplayTag Tag, const int32 NewCount)
 		return;
 	}
 
-	UDBDAuraSubsystem* AuraSubsystem = GetWorld()->GetSubsystem<UDBDAuraSubsystem>();
+	UDBDObjectAuraSubsystem* AuraSubsystem = GetWorld()->GetSubsystem<UDBDObjectAuraSubsystem>();
 	if (!AuraSubsystem)
 	{
 		return;

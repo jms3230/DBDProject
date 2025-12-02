@@ -324,11 +324,11 @@ public:
 	UFUNCTION(Server, Reliable)
 	void Server_SendGameplayTagEventToSelf(const FGameplayTag& Tag, FGameplayEventData EventData);
 #pragma endregion
-
+#pragma region AuraControl
 public:
 	virtual void EnableAura(int32 StencilValue) override;
 	virtual void DisableAura() override;
-
+#pragma endregion
 #pragma region ActionDelegates
 
 public:

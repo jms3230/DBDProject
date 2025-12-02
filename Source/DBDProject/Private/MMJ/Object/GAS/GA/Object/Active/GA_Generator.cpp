@@ -11,7 +11,7 @@
 #include "Shared/Component/InteractorComponent.h"
 #include "Shared/GameFramework/DBDGameStateBase.h"
 #include "Shared/Interface/Interactor.h"
-#include "Shared/Subsystem/DBDAuraSubsystem.h"
+#include "Shared/Subsystem/DBDObjectAuraSubsystem.h"
 
 UGA_Generator::UGA_Generator()
 {
@@ -101,7 +101,7 @@ void UGA_Generator::ExecuteGameplayEffectAndCue(FGameplayEventData Data)
 			}
 		}
 
-		if (UDBDAuraSubsystem* AuraSystem = GetWorld()->GetSubsystem<UDBDAuraSubsystem>())
+		if (UDBDObjectAuraSubsystem* AuraSystem = GetWorld()->GetSubsystem<UDBDObjectAuraSubsystem>())
 		{
 			if (ADBDGameStateBase* DBDGameState = Cast<ADBDGameStateBase>(GetWorld()->GetGameState()))
 			{

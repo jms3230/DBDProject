@@ -19,7 +19,7 @@
 #include "Shared/DBDGameplayTags.h"
 #include "Shared/Component/DBDMotionWarpingComponent.h"
 #include "Shared/Component/InteractableComponent.h"
-#include "Shared/Subsystem/DBDCharacterObserver.h"
+#include "Shared/Subsystem/DBDCharacterSubsystem.h"
 
 
 UGA_Survivor_CapturedByKiller::UGA_Survivor_CapturedByKiller()

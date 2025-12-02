@@ -20,8 +20,6 @@ void UPerk_Adrenaline::OnServerSideInitialized()
 	ADBDGameStateBase* DBDGameStateBase = Cast<ADBDGameStateBase>(GetWorld()->GetGameState());
 	if (DBDGameStateBase)
 	{
-		// 서버에서 Broadcast되는 델리게이트에 바인딩 할것
-		//DBDGameStateBase->OnEscapeTimerBegin.AddDynamic(this, &UPerk_Adrenaline::OnExitDoorEnabled);
 		UDBDObjectObserver* ObjectObserver = GetWorld()->GetSubsystem<UDBDObjectObserver>();
 		if (ObjectObserver)
 		{

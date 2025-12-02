@@ -59,7 +59,7 @@ void UGA_Toolbox_Repair::ActivateAbility(const FGameplayAbilitySpecHandle Handle
 	}
 	InteractStart();
 	EndOnInteractableTaskFinished();
-	LookAt(CachedCurrentInteractableActor);
+	LookAt(GetCachedCurrentInteractable<AActor>());
 
 	if (K2_HasAuthority())
 	{

@@ -4,7 +4,7 @@
 #include "JMS/Perk/Perk_Leader.h"
 
 #include "Shared/DBDDebugHelper.h"
-#include "Shared/Subsystem/DBDCharacterObserver.h"
+#include "Shared/Subsystem/DBDCharacterSubsystem.h"
 
 
 UPerk_Leader::UPerk_Leader()
@@ -15,14 +15,14 @@ UPerk_Leader::UPerk_Leader()
 void UPerk_Leader::OnServerSideInitialized()
 {
 	Super::OnServerSideInitialized();
-	UDBDCharacterObserver* CharacterObserver = GetWorld()->GetSubsystem<UDBDCharacterObserver>();
-	if (!CharacterObserver)
+	UDBDCharacterSubsystem* CharacterSubsystem = GetWorld()->GetSubsystem<UDBDCharacterSubsystem>();
+	if (!CharacterSubsystem)
 	{
-		//Debug::Print(TEXT("JMS11111:CharacterObserver is null"), 11111);
+		//Debug::Print(TEXT("JMS11111:CharacterSubsystem is null"), 11111);
 		return;
 	}
 
-	CharacterObserver->ApplyGEToSurvivorsWithinDistance(GetOuterAsDBDCharacter(), 800,
+	CharacterSubsystem->ApplyGEToSurvivorsWithinDistance(GetOuterAsDBDCharacter(), 800,
 														 LeaderEffect);
 }
 

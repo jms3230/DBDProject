@@ -8,7 +8,7 @@
 #include "KMJ/Axe/ProjectileAxe.h"
 #include "KMJ/Character/KillerHuntress.h"
 #include "MMJ/Object/Component/IC_Cabinet.h"
-#include "Shared/Subsystem/DBDCharacterObserver.h"
+#include "Shared/Subsystem/DBDCharacterSubsystem.h"
 
 AObj_Cabinet::AObj_Cabinet(const FObjectInitializer& ObjectInitializer)
 	: Super(ObjectInitializer.SetDefaultSubobjectClass<UIC_Cabinet>(InteractableComponentName))
@@ -18,9 +18,9 @@ AObj_Cabinet::AObj_Cabinet(const FObjectInitializer& ObjectInitializer)
 
 void AObj_Cabinet::CreateCombinedActor()
 {
-	if (UDBDCharacterObserver* CharacterObserver = GetWorld()->GetSubsystem<UDBDCharacterObserver>())
+	if (UDBDCharacterSubsystem* CharacterSubsystem = GetWorld()->GetSubsystem<UDBDCharacterSubsystem>())
 	{
-		if (AKillerHuntress* Killer = Cast<AKillerHuntress>(CharacterObserver->GetKiller()))
+		if (AKillerHuntress* Killer = Cast<AKillerHuntress>(CharacterSubsystem->GetKiller()))
 		{
 			if (IsValid(Killer->AxeComponent) && IsValid(Killer->AxeComponent->Projectile))
 			{
