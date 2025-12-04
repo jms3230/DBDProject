@@ -20,7 +20,7 @@
 ## 🛠 기술 스택 (Tech Stack)
 ### Development
 <div>
-<img src="https://img.shields.io/badge/Unreal Engine 5-0E1128?style=flat-square&logo=Unreal Engine&logoColor=white"/>
+<img src="https://img.shields.io/badge/Unreal Engine 5-0E1128?style=flat-square&logo=unrealengine&logoColor=white"/>
 <img src="https://img.shields.io/badge/C++-00599C?style=flat-square&logo=c%2B%2B&logoColor=white"/>
 <img src="https://img.shields.io/badge/Gameplay Ability System-FE5F55?style=flat-square&logo=unrealengine&logoColor=white"/>
 <img src="https://img.shields.io/badge/Dedicated Server-00599C?style=flat-square&logo=unrealengine&logoColor=white"/>
