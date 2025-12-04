@@ -17,7 +17,7 @@
 ## 📅 제작 기간
 *   **2025.09.01 - 2025.11.06**
 
-## 🛠 기술 스택 (Tech Stack)
+## 🛠 기술 스택
 ### Development
 <div>
 <img src="https://img.shields.io/badge/Unreal Engine 5-0E1128?style=flat-square&logo=Unreal Engine&logoColor=white"/>
