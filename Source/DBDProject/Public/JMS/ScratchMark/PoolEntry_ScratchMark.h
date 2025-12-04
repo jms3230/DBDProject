@@ -1,7 +1,6 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #pragma once
-
 #include "CoreMinimal.h"
 #include "Shared/ObjectPool/DBDPoolEntryObject.h"
 #include "PoolEntry_ScratchMark.generated.h"
@@ -11,6 +10,7 @@ class UBillboardComponent;
 /**
  * 
  */
+LLM_DECLARE_TAG(APoolEntry_ScratchMark);
 UCLASS()
 class DBDPROJECT_API APoolEntry_ScratchMark : public ADBDPoolEntryObject
 {

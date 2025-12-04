@@ -8,6 +8,7 @@
 #include "Subsystems/WorldSubsystem.h"
 #include "DBDCharacterSubsystem.generated.h"
 
+class APoolEntry_ScratchMark;
 class UGameplayEffect;
 struct FGameplayTagContainer;
 struct FGameplayTag;
@@ -28,11 +29,13 @@ struct FDBDCharacterAuraInfo
 	UPROPERTY()
 	TSet<UObject*> AuraInstigators;
 	int32 StencilValue;
-	
+
 	bool operator==(const FDBDCharacterAuraInfo& right) const;
 	FDBDCharacterAuraInfo(ADBDCharacter* InDBDCharacter);
 	FDBDCharacterAuraInfo() = default;
 };
+
+uint32 GetTypeHash(const FDBDCharacterAuraInfo& AuraInfo);
 
 UCLASS()
 class DBDPROJECT_API UDBDCharacterSubsystem : public UWorldSubsystem
@@ -66,6 +69,7 @@ public:
 	// JMS : 생존자 발자국 활성화
 	void EnableScratchMarkOnEverySurvivor();
 	void EnableScratchMarkOnCurrentSurvivor(ASurvivorCharacter* Survivor);
+
 
 	// MMJ : 캐릭터가 스폰될때마다 서버권한으로 태그체인지델리게이트에 바인딩하는 함수
 	void BindingPlayerCharacter(ADBDCharacter* Player);
@@ -113,5 +117,8 @@ private:
 	UFUNCTION()
 	void LeaveScratchMarkOnSurvivorSprint(ASurvivorCharacter* Survivor, int32 NewCount);
 	void SpawnScratchMarkOnSurvivorLocation(ASurvivorCharacter* Survivor);
+
+	// JMS : ObjectPool을 사용하지 않는 경우
+	void DestroySpawnedScratchMark(APoolEntry_ScratchMark* SpawnedScratchMark);
 	// JMS : ~발자국 구현
 };

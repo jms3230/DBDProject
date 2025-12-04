@@ -28,13 +28,16 @@ UInteractorComponent::UInteractorComponent()
 {
 	// Set this component to be initialized when the game starts, and to be ticked every frame.  You can turn these features
 	// off to improve performance if you don't need them.
+
+	// JMS: UInteractorComponent::TickComponent를 사용할 경우
+	// PrimaryComponentTick.bCanEverTick = true;
+
 	PrimaryComponentTick.bCanEverTick = false;
 	SphereRadius = 150.f;
 	SetIsReplicatedByDefault(true);
 	bIsSearchingEnabled = true;
 	SearchInterval = 0.1f;
 	SearchRadius = 150.f;
-	SetIsReplicatedByDefault(true);
 }
 
 
@@ -42,20 +45,29 @@ UInteractorComponent::UInteractorComponent()
 void UInteractorComponent::BeginPlay()
 {
 	Super::BeginPlay();
+	//
+	// SetCollisionProfileName(FName(TEXT("InteractionOnly")));
 	SetCollisionProfileName(FName("NoCollision"));
 	if (GetOwner()->HasAuthority())
 	{
-		GetWorld()->GetTimerManager().SetTimer(
-			SearchTimerHandle,
-			this,
-			&UInteractorComponent::CheckNearbyInteractable,
-			SearchInterval,
-			true);
+		GetWorld()->GetTimerManager().SetTimer(SearchTimerHandle, this,
+		                                       &UInteractorComponent::CheckNearbyInteractable,
+		                                       SearchInterval, true);
 	}
 }
 
+// JMS: UInteractorComponent::TickComponent를 사용할 경우
+// void UInteractorComponent::TickComponent(float DeltaTime, ELevelTick TickType,
+// 	FActorComponentTickFunction* ThisTickFunction)
+// {
+// 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
+// 	CheckNearbyInteractableTick();
+// }
+
+
 void UInteractorComponent::CheckNearbyInteractable()
 {
+	TRACE_CPUPROFILER_EVENT_SCOPE_STR("UInteractorComponent::CheckNearbyInteractable");
 	if (!bIsSearchingEnabled)
 	{
 		return;
@@ -69,7 +81,6 @@ void UInteractorComponent::CheckNearbyInteractable()
 	                                       SearchRadius,
 	                                       TraceTypeQuery, false, ActorsToIgnore, EDrawDebugTrace::Type::None,
 	                                       HitResults, true, FLinearColor::Red, FLinearColor::Green, 0.1);
-
 	AActor* ClosestActor = nullptr;
 	float ClosestDistance = MAX_FLT;
 	if (HitResults.Num() == 0)
@@ -84,6 +95,42 @@ void UInteractorComponent::CheckNearbyInteractable()
 		if (Interactable && Interactable->GetInteractableComponent()->CanInteraction(GetOwner()))
 		{
 			FVector HitActorLocation = HitResult.GetActor()->GetActorLocation();
+			FVector OwnerLocation = GetOwner()->GetActorLocation();
+			float DistanceToActor = (HitActorLocation - OwnerLocation).Size();
+			if (DistanceToActor < ClosestDistance)
+			{
+				Candidate = Interactable;
+				ClosestDistance = DistanceToActor;
+			}
+		}
+	}
+	RegisterOverlappedInteractable(Candidate);
+}
+
+void UInteractorComponent::CheckNearbyInteractableTick()
+{
+	TRACE_CPUPROFILER_EVENT_SCOPE_STR("UInteractorComponent::CheckNearbyInteractableTick");
+	if (!bIsSearchingEnabled)
+	{
+		return;
+	}
+
+	TArray<AActor*> OverlappedActors;
+	GetOverlappingActors(OverlappedActors);
+	AActor* ClosestActor = nullptr;
+	float ClosestDistance = MAX_FLT;
+	if (OverlappedActors.Num() == 0)
+	{
+		RegisterOverlappedInteractable(nullptr);
+		return;
+	}
+	IInteractable* Candidate = nullptr;
+	for (AActor* OverlappedActor : OverlappedActors)
+	{
+		IInteractable* Interactable = Cast<IInteractable>(OverlappedActor);
+		if (Interactable && Interactable->GetInteractableComponent()->CanInteraction(GetOwner()))
+		{
+			FVector HitActorLocation = OverlappedActor->GetActorLocation();
 			FVector OwnerLocation = GetOwner()->GetActorLocation();
 			float DistanceToActor = (HitActorLocation - OwnerLocation).Size();
 			if (DistanceToActor < ClosestDistance)

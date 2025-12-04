@@ -5,6 +5,7 @@
 
 #include "AbilitySystemBlueprintLibrary.h"
 #include "AbilitySystemComponent.h"
+#include "Components/SphereComponent.h"
 #include "JMS/Character/SurvivorCharacter.h"
 #include "JMS/ScratchMark/PoolEntry_ScratchMark.h"
 #include "KMJ/Character/KillerCharacter.h"
@@ -31,6 +32,11 @@ FDBDCharacterAuraInfo::FDBDCharacterAuraInfo(ADBDCharacter* InDBDCharacter)
 	AuraInstigators.Empty();
 }
 
+
+uint32 GetTypeHash(const FDBDCharacterAuraInfo& AuraInfo)
+{
+	return GetTypeHash(AuraInfo.DBDCharacter);
+}
 
 void UDBDCharacterSubsystem::RegisterKiller(AKillerCharacter* KillerCharacter)
 {
@@ -146,32 +152,34 @@ AKillerCharacter* UDBDCharacterSubsystem::GetKiller() const
 ASurvivorCharacter* UDBDCharacterSubsystem::GetSurvivorByIndex(int32 Index) const
 {
 	return Survivors[Index];
-
 }
 
 TArray<ASurvivorCharacter*> UDBDCharacterSubsystem::GetSurvivors()
 {
 	return Survivors;
 }
+
 // JMS : 거리와 조건 태그들을 활용해 생존자의 오라를 활성화(EX: SelfCare, Bond)
-void UDBDCharacterSubsystem::EnableSurvivorAuraWithDistanceAndTag(UObject* AuraInstigator,ADBDCharacter* EffectOwner, float Distance,
+void UDBDCharacterSubsystem::EnableSurvivorAuraWithDistanceAndTag(UObject* AuraInstigator, ADBDCharacter* EffectOwner,
+                                                                  float Distance,
                                                                   FGameplayTagContainer RequiredTags,
                                                                   FGameplayTagContainer BlockedTags)
 {
 	FTimerDelegate TimerDelegate;
-	TimerDelegate.BindUObject(this, &UDBDCharacterSubsystem::ShowAuraAfterCheckSurvivorDistanceAndTag,AuraInstigator, EffectOwner,
+	TimerDelegate.BindUObject(this, &UDBDCharacterSubsystem::ShowAuraAfterCheckSurvivorDistanceAndTag, AuraInstigator,
+	                          EffectOwner,
 	                          Distance,
 	                          RequiredTags, BlockedTags);
 	FTimerHandle TimerHandle;
 	GetWorld()->GetTimerManager().SetTimer(TimerHandle, TimerDelegate,
 	                                       AuraConditionCheckInterval, true);
 	AuraConditionTimerHandles.Add(TimerHandle);
-	
+
 	RequestAuraRefresh();
 }
 
 void UDBDCharacterSubsystem::ApplyGEWithSurvivorWithinDistance(ADBDCharacter* Target, float Distance,
-                                                              TSubclassOf<UGameplayEffect> GE)
+                                                               TSubclassOf<UGameplayEffect> GE)
 {
 	FTimerDelegate TimerDelegate;
 	TimerDelegate.BindUObject(this, &UDBDCharacterSubsystem::CheckSurvivorDistanceAndApplyEffect, Target,
@@ -183,7 +191,7 @@ void UDBDCharacterSubsystem::ApplyGEWithSurvivorWithinDistance(ADBDCharacter* Ta
 }
 
 void UDBDCharacterSubsystem::ApplyGEToSurvivorsWithinDistance(ADBDCharacter* EffectOwner, float Distance,
-                                                             TSubclassOf<UGameplayEffect> GE)
+                                                              TSubclassOf<UGameplayEffect> GE)
 {
 	FTimerDelegate TimerDelegate;
 	TimerDelegate.BindUObject(this, &UDBDCharacterSubsystem::CheckDistanceAndRefreshEffectToOthers, EffectOwner,
@@ -209,9 +217,10 @@ void UDBDCharacterSubsystem::RequestAuraRefresh()
 
 void UDBDCharacterSubsystem::RefreshAura()
 {
+	TRACE_CPUPROFILER_EVENT_SCOPE_STR("UDBDCharacterSubsystem::RefreshAura");
 	for (FDBDCharacterAuraInfo& AuraInfo : CharacterAuraInfoContainer)
 	{
-		if (AuraInfo.AuraInstigators.Num()>0)
+		if (AuraInfo.AuraInstigators.Num() > 0)
 		{
 			AuraInfo.DBDCharacter->EnableAura(AuraInfo.StencilValue);
 		}
@@ -222,13 +231,15 @@ void UDBDCharacterSubsystem::RefreshAura()
 	}
 }
 
-void UDBDCharacterSubsystem::ShowAuraAfterCheckSurvivorDistanceAndTag(UObject* AuraInstigator, ADBDCharacter* EffectOwner, float Distance,
+void UDBDCharacterSubsystem::ShowAuraAfterCheckSurvivorDistanceAndTag(UObject* AuraInstigator,
+                                                                      ADBDCharacter* EffectOwner, float Distance,
                                                                       FGameplayTagContainer RequiredTags,
                                                                       FGameplayTagContainer BlockedTags)
 {
 	for (FDBDCharacterAuraInfo& AuraInfo : CharacterAuraInfoContainer)
 	{
-		if ((RequiredTags.Num() <= 0 || AuraInfo.DBDCharacter->GetAbilitySystemComponent()->HasAnyMatchingGameplayTags(RequiredTags))
+		if ((RequiredTags.Num() <= 0 || AuraInfo.DBDCharacter->GetAbilitySystemComponent()->
+		                                         HasAnyMatchingGameplayTags(RequiredTags))
 			&&
 			!AuraInfo.DBDCharacter->GetAbilitySystemComponent()->HasAnyMatchingGameplayTags(BlockedTags) &&
 			AuraInfo.DBDCharacter->GetDistanceTo(EffectOwner) <= Distance && AuraInfo.DBDCharacter != EffectOwner)
@@ -244,7 +255,7 @@ void UDBDCharacterSubsystem::ShowAuraAfterCheckSurvivorDistanceAndTag(UObject* A
 }
 
 void UDBDCharacterSubsystem::CheckSurvivorDistanceAndApplyEffect(ADBDCharacter* Target, float Distance,
-                                                                TSubclassOf<UGameplayEffect> GE)
+                                                                 TSubclassOf<UGameplayEffect> GE)
 {
 	int32 SurvivorCount = 0;
 	Target->GetAbilitySystemComponent()->RemoveActiveGameplayEffectBySourceEffect(
@@ -274,7 +285,7 @@ void UDBDCharacterSubsystem::CheckSurvivorDistanceAndApplyEffect(ADBDCharacter* 
 }
 
 void UDBDCharacterSubsystem::CheckDistanceAndRefreshEffectToOthers(ADBDCharacter* EffectOwner, float Distance,
-                                                                  TSubclassOf<UGameplayEffect> GE)
+                                                                   TSubclassOf<UGameplayEffect> GE)
 {
 	for (ASurvivorCharacter* Survivor : Survivors)
 	{
@@ -306,6 +317,7 @@ void UDBDCharacterSubsystem::EnableScratchMarkOnCurrentSurvivor(ASurvivorCharact
 	}
 }
 
+
 void UDBDCharacterSubsystem::BindingPlayerCharacter(ADBDCharacter* Player)
 {
 	if (AKillerCharacter* KillerCharacter = Cast<AKillerCharacter>(Player))
@@ -314,9 +326,10 @@ void UDBDCharacterSubsystem::BindingPlayerCharacter(ADBDCharacter* Player)
 		{
 			if (KillerCharacter->GetAbilitySystemComponent())
 			{
-				KillerCharacter->GetAbilitySystemComponent()->RegisterGameplayTagEvent(DBDGameplayTags::Killer_Common_Status_Carrying,
-					EGameplayTagEventType::NewOrRemoved)
-				.AddUObject(DBDGameMode, &ADBDGameMode::OnKillerTagChange);
+				KillerCharacter->GetAbilitySystemComponent()->RegisterGameplayTagEvent(
+					               DBDGameplayTags::Killer_Common_Status_Carrying,
+					               EGameplayTagEventType::NewOrRemoved)
+				               .AddUObject(DBDGameMode, &ADBDGameMode::OnKillerTagChange);
 			}
 		}
 	}
@@ -354,8 +367,9 @@ void UDBDCharacterSubsystem::UnBindingPlayerCharacter(ADBDCharacter* Player)
 		{
 			if (KillerCharacter->GetAbilitySystemComponent())
 			{
-				KillerCharacter->GetAbilitySystemComponent()->RegisterGameplayTagEvent(DBDGameplayTags::Killer_Common_Status_Carrying, EGameplayTagEventType::NewOrRemoved)
-				.RemoveAll(DBDGameMode);
+				KillerCharacter->GetAbilitySystemComponent()->RegisterGameplayTagEvent(
+					               DBDGameplayTags::Killer_Common_Status_Carrying, EGameplayTagEventType::NewOrRemoved)
+				               .RemoveAll(DBDGameMode);
 			}
 		}
 	}
@@ -407,4 +421,19 @@ void UDBDCharacterSubsystem::SpawnScratchMarkOnSurvivorLocation(ASurvivorCharact
 	APoolEntry_ScratchMark* ScratchMarkActor = Survivor->GetScratchMarkFromPool();
 	ScratchMarkActor->SetActorLocation(Survivor->GetActorLocation());
 	ScratchMarkActor->SetActive(true, Survivor);
+	// FActorSpawnParameters SpawnParams;
+	// SpawnParams.Owner = Survivor;
+	// SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
+	// APoolEntry_ScratchMark* SpawnedScratchMark = GetWorld()->SpawnActor<APoolEntry_ScratchMark>(SpawnParams);
+	// SpawnedScratchMark->SetActorLocation(Survivor->GetActorLocation());
+	// FTimerDelegate DestroyScratchMarkDelegate;
+	// DestroyScratchMarkDelegate.BindUObject(this, &UDBDCharacterSubsystem::DestroySpawnedScratchMark,
+	//                                        SpawnedScratchMark);
+	// FTimerHandle DestroyScratchMarkTimerHandle;
+	// GetWorld()->GetTimerManager().SetTimer(DestroyScratchMarkTimerHandle, DestroyScratchMarkDelegate, 6.f, false);
+}
+
+void UDBDCharacterSubsystem::DestroySpawnedScratchMark(APoolEntry_ScratchMark* SpawnedScratchMark)
+{
+	SpawnedScratchMark->Destroy();
 }

@@ -7,15 +7,14 @@
 // Sets default values
 ADBDPoolEntryObject::ADBDPoolEntryObject()
 {
- 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
+	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = false;
 	InitialLifeSpan = 0.f;
-
 }
 
 void ADBDPoolEntryObject::Deactivate()
 {
-	SetActive(false,nullptr);
+	SetActive(false, nullptr);
 	GetWorldTimerManager().ClearAllTimersForObject(this);
 	OnPooledObjectDespawn.Broadcast(this);
 	SetActorHiddenInGame(true);
@@ -24,10 +23,13 @@ void ADBDPoolEntryObject::Deactivate()
 
 void ADBDPoolEntryObject::SetActive(bool IsActive, APawn* InInstigator)
 {
-	SetInstigator(InInstigator);
+	if (IsActive)
+	{
+		SetInstigator(InInstigator);
+		GetWorldTimerManager().SetTimer(LifeTimeTimerHandle, this, &ADBDPoolEntryObject::Deactivate, LifeTime, false);
+	}
 	bIsActive = IsActive;
 	SetActorHiddenInGame(!IsActive);
-	GetWorldTimerManager().SetTimer(LifeTimeTimerHandle, this, &ADBDPoolEntryObject::Deactivate, LifeTime, false);
 }
 
 void ADBDPoolEntryObject::SetLifeTime(float InLifeTime)
@@ -49,4 +51,3 @@ int ADBDPoolEntryObject::GetPoolIndex()
 {
 	return PoolIndex;
 }
-

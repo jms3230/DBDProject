@@ -6,9 +6,10 @@
 #include "Components/BillboardComponent.h"
 #include "Components/DecalComponent.h"
 
-
+LLM_DEFINE_TAG(APoolEntry_ScratchMark);
 APoolEntry_ScratchMark::APoolEntry_ScratchMark()
 {
+	LLM_SCOPE_BYTAG(APoolEntry_ScratchMark);
 	RootIndicator = CreateDefaultSubobject<UBillboardComponent>(TEXT("RootIndicator"));
 	SetRootComponent(RootIndicator);
 	ScratchMarkDecalComponentWall = CreateDefaultSubobject<UDecalComponent>(TEXT("ScratchMarkDecalComponentWall"));

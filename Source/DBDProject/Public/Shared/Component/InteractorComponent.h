@@ -33,6 +33,8 @@ public:
 	// Sets default values for this component's properties
 	UInteractorComponent();
 	virtual void BeginPlay() override;
+	// JMS: UInteractorComponent::TickComponent를 사용할 경우
+	// virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 	
 	UFUNCTION(BlueprintCallable)
 	void InteractWithCurrentInteractable();
@@ -46,6 +48,9 @@ protected:
 	UFUNCTION()
 	void CheckNearbyInteractable();
 
+	UFUNCTION()
+	void CheckNearbyInteractableTick();
+	
 	void RegisterOverlappedInteractable(IInteractable* Interactable);
 	void UnRegisterOverlappedInteractable(IInteractable* Interactable);
 	
