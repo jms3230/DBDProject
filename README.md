@@ -37,6 +37,9 @@
 ### 🏃‍♂️ 캐릭터 (생존자)
 *   **캐릭터 초기화 로직 (Character Creation)**
     *   **캐릭터 스폰 및 초기화 과정 시퀀스 다이어그램**
+    <details>
+    <summary>캐릭터 스폰 및 초기화 과정 시퀀스 다이어그램</summary>
+    
     ```mermaid
     sequenceDiagram
     participant ADBDGameMode
@@ -269,8 +272,20 @@
 	    +OnOwnerClientSideInitialized() void*
     }
 
+    class UPerkComponent자식클래스{
+        UPerk_Adrenaline
+        UPerk_Bond
+        UPerk_BotanyKnowledge
+        UPerk_Empathy
+        UPerk_Leader
+        UPerk_ProveThyself
+        UPerk_QuickAndQuiet
+        UPerk_SelfCare
+        UPerk_SprintBurst
+    }
 
     ADBDCharacter --> UPerkComponent
+    UPerkComponent <|-- UPerkComponent자식클래스
     ```
 *   **아이템 & 애드온**
     *   구급상자, 공구상자 등 아이템 장착, 버리기, 사용 구현.
@@ -278,7 +293,7 @@
 *   **캐릭터 오라 시스템**
     *   서브시스템을 활용한 구현
 *   **생존자 발자국 시스템**
-    *   **Object Pooling**: `ScratchMark`(발자국)와 같이 빈번하게 생성/삭제되는 객체에 풀링 시스템 적용하여 성능 최적화.
+    *   **Object Pooling**: `ScratchMark`(발자국)와 같이 빈번하게 생성/삭제되는 객체에 풀링 시스템 적용하여 성능 최적화
 
 ## 📂 자료
 *   [📄 발표 PPT](https://drive.google.com/drive/folders/1GIwR3PEj1KsdwtcEwJnWt60qXxBfUbw3?usp=sharing)
