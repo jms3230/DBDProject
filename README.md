@@ -4,7 +4,7 @@
 
 ## 📝 프로젝트 소개
 멀티플레이어 PVP 게임 **Dead by Daylight**를 모작한 프로젝트입니다.  
-언리얼 엔진 5와 C++로 개발되었으며, **Dedicated Server**로 구현되었습니다. **Gameplay Ability System (GAS)**을 활용하여 캐릭터의 능력, 상태, 상호작용을 객체지향적으로 구현했습니다.
+**언리얼 엔진 5**와 **C++**로 개발되었으며, **Dedicated Server**로 구현되었습니다. **Gameplay Ability System**을 활용하여 캐릭터의 능력, 상태, 상호작용을 객체지향적으로 구현했습니다.
 
 ## 👥 팀원 및 역할
 | 이름 | 역할 | 담당 파트 |
@@ -207,9 +207,9 @@
 >    deactivate ASurvivorCharacter
 >    ```
 ###   🎮**Gameplay Ability System 활용 (GAS)**
-*   **GameplayTag**:  건강함(Normal), 부상(Injured), 빈사(Dying) 등 상태 체크, 애니메이션, 이벤트 처리.
+*   **GameplayTag**:  건강함(Normal), 부상(Injured), 빈사(Dying) 등 상태 체크, 애니메이션, 이벤트 처리
 *   **GameplayAbility**: 상호작용(수리, 치료), 패시브(잡힘, 갈고리 걸림) 등 액션 모듈화.
-*   **GameplayEffect**: 아이템/퍽 효과 적용 및 상태 이상(Buff/Debuff) 처리.
+*   **GameplayEffect**: 아이템/퍽 효과 적용 및 상태 이상(Buff/Debuff) 처리
 >   **📊클래스 다이어그램**
 >    ```mermaid
 >    classDiagram
@@ -269,8 +269,8 @@
 >    USurvivorPassiveAbility <|-- USurvivorPassiveAbility자식클래스
 >    ```
 ###  🤝**상호작용 컴포넌트 (InteractorComponent)**
-*   `InteractableComponent`와 `InteractorComponent`로 이루어진 독립적인 상호작용 모듈 구현.
-*   커스텀 충돌 채널을 활용.
+*   `InteractableComponent`와 `InteractorComponent`로 이루어진 독립적인 상호작용 모듈 구현
+*   커스텀 충돌 채널을 활용
 *   발전기 수리, 동료 치료, 갈고리 파괴 등 다양한 상호작용 구현
 *   타이머를 활용하여 성능 최적화
 >   **📊시퀀스 다이어그램**
@@ -304,7 +304,7 @@
 >    deactivate SS
 >    ```
 ###   ⏱️**스킬체크 컴포넌트 (Skill Check)**
-*   수리나 치료 중 무작위로 발생하는 QTE 시스템.
+*   수리나 치료 중 무작위로 발생하는 QTE 시스템
 *   성공/대성공/실패에 따른 진행도 보너스 및 페널티 적용
 >   **📊시퀀스 다이어그램**
 >   ```mermaid
