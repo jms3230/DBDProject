@@ -3,7 +3,7 @@
 [![Video Label](http://img.youtube.com/vi/ro7gwYu5df8/0.jpg)](https://youtu.be/ro7gwYu5df8)
 
 ## 📝 프로젝트 소개
-비대칭 멀티플레이어 서바이벌 호러 게임 **Dead by Daylight**를 모작한 프로젝트입니다.  
+멀티플레이어 PVP 게임 **Dead by Daylight**를 모작한 프로젝트입니다.  
 언리얼 엔진 5와 C++로 개발되었으며, **Dedicated Server**로 구현되었습니다. **Gameplay Ability System (GAS)**을 활용하여 캐릭터의 능력, 상태, 상호작용을 객체지향적으로 구현했습니다.
 
 ## 👥 팀원 및 역할
