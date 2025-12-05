@@ -60,6 +60,7 @@
     ASurvivorCharacter->>ASurvivorCharacter: 서브시스템에 생존자 등록
     deactivate ASurvivorCharacter
     ```
+    </details>
      <details>
     <summary> 퍽 초기화 과정 시퀀스 다이어그램(생존자, 살인마 공통)</summary>
     
@@ -91,6 +92,7 @@
     end
 
     ```
+    </details>
     <details>
     <summary>아이템 초기화 과정 시퀀스 다이어그램</summary>
 
@@ -128,6 +130,7 @@
     deactivate ASurvivorItem
     deactivate ASurvivorCharacter
     ```
+    </details>
 *   **상태 관리 (State Management)**
     *   건강함(Normal) -> 부상(Injured) -> 빈사(Dying) -> 갈고리(Hooked) -> 사망(Dead)으로 이어지는 생명 주기 구현.
     *   GameplayTag를 사용하여 상태 체크 및 이벤트 처리.
