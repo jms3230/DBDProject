@@ -38,7 +38,7 @@
 *   **캐릭터 초기화 로직 (Character Creation)**
     *   **캐릭터 스폰 및 초기화 과정 시퀀스 다이어그램**
     <details>
-    <summary>캐릭터 스폰 및 초기화 과정 시퀀스 다이어그램</summary>
+    <summary><b>📊캐릭터 스폰 및 초기화 과정 시퀀스 다이어그램</b></summary>
     
     ```mermaid
     sequenceDiagram
@@ -62,7 +62,7 @@
     ```
     </details>
      <details>
-    <summary> 퍽 초기화 과정 시퀀스 다이어그램(생존자, 살인마 공통)</summary>
+    <summary><b>📊퍽 초기화 과정 시퀀스 다이어그램(생존자, 살인마 공통)</b></summary>
     
     ```mermaid
     sequenceDiagram
@@ -94,7 +94,7 @@
     ```
     </details>
     <details>
-    <summary>아이템 초기화 과정 시퀀스 다이어그램</summary>
+    <summary><b>📊아이템 초기화 과정 시퀀스 다이어그램</b></summary>
 
     ```mermaid
     sequenceDiagram
