@@ -34,315 +34,314 @@
 </div>
 
 ## 💡 주요 기능 (Key Features)
-### 🏃‍♂️ 캐릭터 (생존자)
-*   **캐릭터 및 로드아웃(장비) 시스템**
-    *   Modular Character 설계로 캐릭터 커스터마이징을 위한 기반 구조 구현
-    *   퍽(Perk), 아이템, 애드온으로 이루어진 로드아웃 시스템
-    *   데이터테이블을 활용해 체계적으로 관리
-    *   다형성을 활용하여 기반 시스템 수정 없이 확장 가능
-    *   📊**캐릭터 클래스 다이어그램**
-    ```mermaid
-    classDiagram
-    ADBDCharacter <|-- ASurvivorCharacter
-    ADBDCharacter <|-- AKillerCharacter
-    class ADBDCharacter{
-      +ServerSideInit() void*
-      +ClientSideInit() void*
-    }
-    class ASurvivorCharacter{
-      +PossessedBy(AController*) void*
-      +OnRep_PlayerState() void*
-      +ServerSideInit() void*
-      +ClientSideInit() void*
-    }
-    class AKillerCharacter{
-      +PossessedBy(AController*) void*
-      +OnRep_PlayerState() void*
-      +ServerSideInit() void*
-      +ClientSideInit() void*
-    }
-    ```
-    
-    *   📊**퍽 클래스 다이어그램**
-    ```mermaid
-    classDiagram
-    direction LR
-    class ADBDCharacter {
-	    #AuthInitPerks() void
-	    #Client_UpdatePerk(UPerkComponent* ...) void
-    }
+### 🏃‍♂️ 캐릭터 및 로드아웃(장비) 시스템
+*   Modular Character 설계로 캐릭터 커스터마이징을 위한 기반 구조 구현
+*   퍽(Perk), 아이템, 애드온으로 이루어진 로드아웃 시스템
+*   데이터테이블을 활용해 체계적으로 관리
+*   다형성을 활용하여 기반 시스템 수정 없이 확장 가능
+>   📊**클래스 다이어그램**
+>   *   **캐릭터**
+>   ```mermaid
+>    classDiagram
+>    ADBDCharacter <|-- ASurvivorCharacter
+>    ADBDCharacter <|-- AKillerCharacter
+>    class ADBDCharacter{
+>      +ServerSideInit() void*
+>      +ClientSideInit() void*
+>    }
+>    class ASurvivorCharacter{
+>      +PossessedBy(AController*) void*
+>      +OnRep_PlayerState() void*
+>      +ServerSideInit() void*
+>      +ClientSideInit() void*
+>    }
+>    class AKillerCharacter{
+>      +PossessedBy(AController*) void*
+>      +OnRep_PlayerState() void*
+>      +ServerSideInit() void*
+>      +ClientSideInit() void*
+>    }
+>    ```
+>    
+>    *   **퍽**
+>    ```mermaid
+>    classDiagram
+>    direction LR
+>    class ADBDCharacter {
+>	    #AuthInitPerks() void
+>	    #Client_UpdatePerk(UPerkComponent* ...) void
+>    }
+>
+>    class UPerkComponent {
+>	    +OnServerSideInitialized() void*
+>	    +OnOwnerClientSideInitialized() void*
+>    }
+>
+>    class UPerkComponent자식클래스{
+>        UPerk_Adrenaline
+>        UPerk_Bond
+>        UPerk_BotanyKnowledge
+>        UPerk_Empathy
+>        UPerk_Leader
+>        UPerk_ProveThyself
+>        UPerk_QuickAndQuiet
+>        UPerk_SelfCare
+>        UPerk_SprintBurst
+>    }
+>
+>    ADBDCharacter --> UPerkComponent
+>    UPerkComponent <|-- UPerkComponent자식클래스
+>    ```
+>    *   **아이템 & 애드온**
+>    ```mermaid
+>    classDiagram
+>    direction LR
+>    class ASurvivorCharacter {
+>        +EquipItem(ASurvivorItem*) void
+>        +DropItem(ASurvivorItem*) void
+>    }
+>    
+>    class ASurvivorItem {
+>        +OnInitialized() void
+>        +OnEquipItem() void*
+>        +OnDropItem() void*
+>        #Addon1: UItemAddonComponent#42;
+>        #Addon2: UItemAddonComponent#42;
+>    }
+>
+>    class UItemAddonComponent{
+>      +OnEquip() void
+>      +OnUnEquip() void
+>      +OnInitialized() void
+>    }
+>    ASurvivorCharacter <..> ASurvivorItem
+>    ASurvivorItem *.. UItemAddonComponent
+>    ```
 
-    class UPerkComponent {
-	    +OnServerSideInitialized() void*
-	    +OnOwnerClientSideInitialized() void*
-    }
-
-    class UPerkComponent자식클래스{
-        UPerk_Adrenaline
-        UPerk_Bond
-        UPerk_BotanyKnowledge
-        UPerk_Empathy
-        UPerk_Leader
-        UPerk_ProveThyself
-        UPerk_QuickAndQuiet
-        UPerk_SelfCare
-        UPerk_SprintBurst
-    }
-
-    ADBDCharacter --> UPerkComponent
-    UPerkComponent <|-- UPerkComponent자식클래스
-    ```
-    *   📊**아이템 & 애드온 클래스 다이어그램**
-    ```mermaid
-    classDiagram
-    direction LR
-    class ASurvivorCharacter {
-        +EquipItem(ASurvivorItem*) void
-        +DropItem(ASurvivorItem*) void
-    }
-    
-    class ASurvivorItem {
-        +OnInitialized() void
-        +OnEquipItem() void*
-        +OnDropItem() void*
-        #Addon1: UItemAddonComponent#42;
-        #Addon2: UItemAddonComponent#42;
-    }
-
-    class UItemAddonComponent{
-      +OnEquip() void
-      +OnUnEquip() void
-      +OnInitialized() void
-    }
-    ASurvivorCharacter <..> ASurvivorItem
-    ASurvivorItem *.. UItemAddonComponent
-    ```
-
-*   **📊캐릭터 스폰 및 초기화 과정 시퀀스 다이어그램**
-
-    ```mermaid
-    sequenceDiagram
-    participant ADBDGameMode
-    participant ASurvivorCharacter
-    ADBDGameMode->>ASurvivorCharacter: HandleStartingNewPlayer_Implementation(APlayerController* NewPlayer) 호출
-    ADBDGameMode->>ADBDGameMode: SpawnSurvivorCharacter(PS, SurvivorSpawnTransform) 호출
-    ADBDGameMode->>ADBDGameMode: NewPlayer->Possess 호출
-    activate ASurvivorCharacter
-    note over ASurvivorCharacter: PossessedBy(NewController)
-    ASurvivorCharacter->>+ASurvivorCharacter: ServerSideInit() 호출
-    note over ASurvivorCharacter: ServerSideInit()
-    ASurvivorCharacter->>ASurvivorCharacter: GAS 초기화, AnimInstance와 GAS 연결
-    alt 아이템 설정됨 (InitialItemInfo 존재)
-        ASurvivorCharacter->>ASurvivorCharacter: InitializeEquippedItem(InitialItemInfo) 호출
-    else 아이템 설정 안됨
-        ASurvivorCharacter->>ASurvivorCharacter: 초기화 스킵
-    end
-    ASurvivorCharacter->>ASurvivorCharacter: 서브시스템에 생존자 등록
-    deactivate ASurvivorCharacter
-    ```
-    
-*   **📊퍽 초기화 과정 시퀀스 다이어그램(생존자, 살인마 공통)**
-
-    ```mermaid
-    sequenceDiagram
-    participant ADBDCharacterServer as ADBDCharacter (Server)
-    participant UPerkComponent
-    participant ADBDCharacterClient as ADBDCharacter (Client)
-    
-    note over ADBDCharacterServer: AuthInitPerks()
-    
-    ADBDCharacterServer->>ADBDCharacterServer: Killer/Survivor 판별 후 알맞는 데이터 테이블 조회
-    
-    loop 퍽 4종
-        ADBDCharacterServer->>ADBDCharacterServer: InitializePerks(DataTable, 퍽 4개 Datatable 키) 호출
-        ADBDCharacterServer->>UPerkComponent: 스폰 & RegisterComponent() 호출
-        ADBDCharacterServer->>UPerkComponent: OnServerSideInitilaized() 호출
-    end
-    
-    note over ADBDCharacterServer: BeginPlay()
-    
-    ADBDCharacterServer->>ADBDCharacterServer: 5초 후에 InitPerkOnClient() 호출
-   
-    ADBDCharacterServer->>ADBDCharacterClient: Client_UpdatePerk(UPerkComponent* 퍽 4개) 호출
-    
-    loop 퍽 4종
-        ADBDCharacterClient->>UPerkComponent: OnOwnerClientSideInitilaized() 호출
-        ADBDCharacterClient->>UPerkComponent: RegisterComponent() 호출
-    end
-
-    ```
-    
-*   **📊아이템 초기화 과정 시퀀스 다이어그램**
-    ```mermaid
-    sequenceDiagram
-    participant ASurvivorCharacter
-    participant ASurvivorItem
-    participant UAddonComponent
-    participant USurvivorAttributeSet
-    
-    activate ASurvivorCharacter
-    note over ASurvivorCharacter: InitializeEquippedItem()
-    
-    ASurvivorCharacter->>ASurvivorItem: 스폰(DB에서 키 값 조회)
-    activate ASurvivorItem
-    loop 애드온 1,2
-        note over ASurvivorCharacter: 애드온 초기화
-        Activate UAddonComponent
-        ASurvivorCharacter->>UAddonComponent: 스폰 & Attach (UAddonComponent)
-        UAddonComponent->>UAddonComponent: OnInitialized() 호출
-    end
-    
-    ASurvivorCharacter->>ASurvivorCharacter: EquipItem(스폰한 아이템)
-    
-    ASurvivorItem->>ASurvivorItem: AttachToCharacter
-    ASurvivorItem->>+ASurvivorItem: OnEquipItem() 호출
-    
-    note over ASurvivorItem: 아이템 장착
-    ASurvivorItem->>USurvivorAttributeSet: 아이템 내구도 어트리뷰트 초기화
-    ASurvivorItem->>UAddonComponent: OnEquip() 호출
-    ASurvivorItem->>ASurvivorItem: 아이템 어빌리티 부여
-    
-    ASurvivorItem->>-ASurvivorItem: OnInitialized() 호출
-    
-    deactivate ASurvivorItem
-    deactivate ASurvivorCharacter
-    ```
-*   **Gameplay Ability System 활용 (GAS)**
-    *   **GameplayTag**:  건강함(Normal), 부상(Injured), 빈사(Dying) 등 상태 체크, 애니메이션, 이벤트 처리.
-    *   **GameplayAbility**: 상호작용(수리, 치료), 패시브(잡힘, 갈고리 걸림) 등 액션 모듈화.
-    *   **GameplayEffect**: 아이템/퍽 효과 적용 및 상태 이상(Buff/Debuff) 처리.
-    *   **GameplayAbility 클래스 다이어그램**
-    ```mermaid
-    classDiagram
-
-    class USurvivorInteractionAbility {
-        +GetInteractorComponentFromActorInfo(): UInteractorComponent#42;
-        +InteractStart(): void
-        +SetRandomSkillCheckEnabledOnClient(): void
-        +Server_SendSkillCheckResult(): void*
-        #GetCachedCurrentInteractable~T~(): T#42;
-    }
-    USurvivorGameplayAbility <|-- USurvivorInteractionAbility
-
-    USurvivorGameplayAbility <|-- USurvivorPassiveAbility
-
-    USurvivorGameplayAbility <|-- USurvivorUseItemAbility
-
-    class UItemGameplayAbility_Charge {
-        +ChargeConsumptionPerSecond: float
-        #ChargeConsumptionEffect: UGameplayEffect
-        #OnCurrentItemChargeChanged(): void
-    }
-    USurvivorInteractionAbility <|-- UItemGameplayAbility_Charge
-
-    class USurvivorInteractionAbility자식클래스{
-        UGA_SelfCare
-        UGA_Survivor_RepairGenerator
-        UGA_Survivor_Rescue
-        UGA_Survivor_HealOther
-        UGA_Survivor_OpenCabinet
-        UGA_Toolbox_Sabotage
-    }
-    USurvivorInteractionAbility <|-- USurvivorInteractionAbility자식클래스
-
-    class UItemGameplayAbility_Charge자식클래스{
-        UGA_MedKit_HealSelf
-        UGA_MedKit_HealOther
-        UGA_Toolbox_Repair
-        UGA_Toolbox_Sabotage
-    }
-    UItemGameplayAbility_Charge <|-- UItemGameplayAbility_Charge자식클래스
-
-    USurvivorUseItemAbility <|-- UGA_UseFireCracker
-
-    class USurvivorGameplayAbility자식클래스{
-        UGA_Survivor_Crouch
-        UGA_Survivor_Drop
-        UGA_Survivor_Sprint
-    }
-    USurvivorGameplayAbility <|-- USurvivorGameplayAbility자식클래스
-
-    class USurvivorPassiveAbility자식클래스{
-        UGA_Survivor_Dying
-        UGA_Survivor_HookedIn
-        UGA_Survivor_CapturedByKiller
-    }
-    USurvivorPassiveAbility <|-- USurvivorPassiveAbility자식클래스
-    ```
-*   **상호작용 컴포넌트 (InteractorComponent)**
-    *   `InteractableComponent`와 `InteractorComponent`로 이루어진 독립적인 상호작용 모듈 구현.
-    *   커스텀 충돌 채널을 활용.
-    *   발전기 수리, 동료 치료, 갈고리 파괴 등 다양한 상호작용 구현
-    *   타이머를 활용하여 성능 최적화
-    *   **InteractorComponent 동작 시퀀스 다이어그램**
-    ```mermaid
-    sequenceDiagram
-    participant SC as UInteractorComponent(Client)
-    participant SS as UInteractorComponent(Server)
-    participant IC as UInteractableComponent(Server)
-    participant GAS as USurvivorInteractionAbility(Server)
-    activate SS
-    note over SS: BeginPlay
-    SS->>SS: 타이머 시작
-    loop 지정된 Interval마다 반복
-        SS->>SS: CheckNearbyInteractable() 호출
-        alt CurrentInteractable이 변경됨
-            SS->>SC: RPC호출(변경사항 즉시 반영)
-        end
-    end
-    activate GAS
-    note over GAS: 자식 클래스에서
-    GAS->>SS: InteractWithCurrentInteractable 호출
-
-    note over SS: InteractWithCurrentInteractable
-    SS->>IC: Interface를 통해 StartInteraction 호출
-    SS->>SS: 탐색 중지
-    GAS->>SS: EndInteraction 호출
-    SS->>IC: Interface를 통해 FinishInteraction 호출
-    SS->>SS: 탐색 재개
-   
-    deactivate GAS
-    deactivate SS
-    ```
-*   **스킬체크 컴포넌트 (Skill Check)**
-    *   수리나 치료 중 무작위로 발생하는 QTE 시스템.
-    *   성공/대성공/실패에 따른 진행도 보너스 및 페널티 적용
-    *   **스킬체크 동작 시퀀스 다이어그램**
-    ```mermaid
-    sequenceDiagram
-    participant S as USkillCheckComponent
-    participant GAC as USurvivorInteractionAbility(Client)
-    participant GAS as USurvivorInteractionAbility(Server)
-
-    activate GAC
-    note right of GAC: 자식 클래스의 ActivateAbility
-    GAC->>GAC: SetRandomSkillCheckEnabledOnClient(float Frequency)  호출
-    alt 어빌리티 활성화
-        GAC->>S: SkillCheckEndDelegate에 가입
-        note right of GAC: SetRandomSkillCheckEnabledOnClient
-        GAC->>GAC: 스킬체크 타이머 시작(시간 랜덤)
-        activate S
-        GAC->>S: 타이머 발동 시 TriggerOneShotSkillCheck 호출
-        S->>S: 스킬체크 미니게임 진행(Tick으로 타이밍 측정)
-        note over GAC,S: 스킬체크 종료 루틴
-        S->>GAC: 스킬체크 종료 후 Delegate로 결과값(ESkillCheckResult) 전달
-        deactivate S
-        GAC->GAS: RPC로 결과를 서버로 전달
-    else 어빌리티 종료
-        alt 스킬체크 진행중
-            note over GAC,S: 스킬체크 종료 루틴
-        end
-    end
-    deactivate GAC
-    ```
-*   **캐릭터 오라 시스템**
-    *   CustomDepth를 활용하여 가려진 캐릭터의 실루엣을 표시하는 기능
-    *   서브시스템에서 관리하여 오라 퍽을 갖는 클라이언트에만 표시
-    *   캐릭터별 오라 정보를 중앙에서 관리하여 여러 퍽에 의한 오라가 중첩된 경우를 처리
-*   **생존자 발자국 시스템**
-    *   달리는 생존자의 발자국을 살인마에게 보여주는 기능
-    *   서브시스템을 이용해 살인마 클라이언트에만 표시 
-    *   DecalComponent를 Actor에 붙여 스폰하되, 오브젝트 풀링으로 재사용하여 성능 최적화
+>   **📊시퀀스 다이어그램**
+>   *   **캐릭터 스폰 및 초기화 과정**
+>   ```mermaid
+>   sequenceDiagram
+>   participant ADBDGameMode
+>   participant ASurvivorCharacter
+>   ADBDGameMode->>ASurvivorCharacter: HandleStartingNewPlayer_Implementation(APlayerController* NewPlayer) 호출
+>   ADBDGameMode->>ADBDGameMode: SpawnSurvivorCharacter(PS, SurvivorSpawnTransform) 호출
+>   ADBDGameMode->>ADBDGameMode: NewPlayer->Possess 호출
+>   activate ASurvivorCharacter
+>   note over ASurvivorCharacter: PossessedBy(NewController)
+>   ASurvivorCharacter->>+ASurvivorCharacter: ServerSideInit() 호출
+>   note over ASurvivorCharacter: ServerSideInit()
+>   ASurvivorCharacter->>ASurvivorCharacter: GAS 초기화, AnimInstance와 GAS 연결
+>   alt 아이템 설정됨 (InitialItemInfo 존재)
+>        ASurvivorCharacter->>ASurvivorCharacter: InitializeEquippedItem(InitialItemInfo) 호출
+>    else 아이템 설정 안됨
+>        ASurvivorCharacter->>ASurvivorCharacter: 초기화 스킵
+>    end
+>    ASurvivorCharacter->>ASurvivorCharacter: 서브시스템에 생존자 등록
+>    deactivate ASurvivorCharacter
+>    ```
+>    
+>    *   **퍽 초기화 과정(생존자, 살인마 공통)**
+>    ```mermaid
+>    sequenceDiagram
+>    participant ADBDCharacterServer as ADBDCharacter (Server)
+>    participant UPerkComponent
+>    participant ADBDCharacterClient as ADBDCharacter (Client)
+>    
+>    note over ADBDCharacterServer: AuthInitPerks()
+>    
+>    ADBDCharacterServer->>ADBDCharacterServer: Killer/Survivor 판별 후 알맞는 데이터 테이블 조회
+>    
+>    loop 퍽 4종
+>        ADBDCharacterServer->>ADBDCharacterServer: InitializePerks(DataTable, 퍽 4개 Datatable 키) 호출
+>        ADBDCharacterServer->>UPerkComponent: 스폰 & RegisterComponent() 호출
+>        ADBDCharacterServer->>UPerkComponent: OnServerSideInitilaized() 호출
+>    end
+>    
+>    note over ADBDCharacterServer: BeginPlay()
+>    
+>    ADBDCharacterServer->>ADBDCharacterServer: 5초 후에 InitPerkOnClient() 호출
+>   
+>    ADBDCharacterServer->>ADBDCharacterClient: Client_UpdatePerk(UPerkComponent* 퍽 4개) 호출
+>    
+>    loop 퍽 4종
+>        ADBDCharacterClient->>UPerkComponent: OnOwnerClientSideInitilaized() 호출
+>        ADBDCharacterClient->>UPerkComponent: RegisterComponent() 호출
+>    end
+>
+>    ```
+>    
+>    *   **아이템 & 애드온 초기화 과정**
+>    ```mermaid
+>    sequenceDiagram
+>    participant ASurvivorCharacter
+>    participant ASurvivorItem
+>    participant UAddonComponent
+>    participant USurvivorAttributeSet
+>    
+>    activate ASurvivorCharacter
+>    note over ASurvivorCharacter: InitializeEquippedItem()
+>    
+>    ASurvivorCharacter->>ASurvivorItem: 스폰(DB에서 키 값 조회)
+>    activate ASurvivorItem
+>    loop 애드온 1,2
+>        note over ASurvivorCharacter: 애드온 초기화
+>        Activate UAddonComponent
+>        ASurvivorCharacter->>UAddonComponent: 스폰 & Attach (UAddonComponent)
+>        UAddonComponent->>UAddonComponent: OnInitialized() 호출
+>    end
+>    
+>    ASurvivorCharacter->>ASurvivorCharacter: EquipItem(스폰한 아이템)
+>    
+>    ASurvivorItem->>ASurvivorItem: AttachToCharacter
+>    ASurvivorItem->>+ASurvivorItem: OnEquipItem() 호출
+>    
+>    note over ASurvivorItem: 아이템 장착
+>    ASurvivorItem->>USurvivorAttributeSet: 아이템 내구도 어트리뷰트 초기화
+>    ASurvivorItem->>UAddonComponent: OnEquip() 호출
+>    ASurvivorItem->>ASurvivorItem: 아이템 어빌리티 부여
+>    
+>    ASurvivorItem->>-ASurvivorItem: OnInitialized() 호출
+>    
+>    deactivate ASurvivorItem
+>    deactivate ASurvivorCharacter
+>    ```
+###   🎮**Gameplay Ability System 활용 (GAS)**
+*   **GameplayTag**:  건강함(Normal), 부상(Injured), 빈사(Dying) 등 상태 체크, 애니메이션, 이벤트 처리.
+*   **GameplayAbility**: 상호작용(수리, 치료), 패시브(잡힘, 갈고리 걸림) 등 액션 모듈화.
+*   **GameplayEffect**: 아이템/퍽 효과 적용 및 상태 이상(Buff/Debuff) 처리.
+>   **📊클래스 다이어그램**
+>    ```mermaid
+>    classDiagram
+>
+>    class USurvivorInteractionAbility {
+>        +GetInteractorComponentFromActorInfo(): UInteractorComponent#42;
+>        +InteractStart(): void
+>        +SetRandomSkillCheckEnabledOnClient(): void
+>        +Server_SendSkillCheckResult(): void*
+>        #GetCachedCurrentInteractable~T~(): T#42;
+>    }
+>    USurvivorGameplayAbility <|-- USurvivorInteractionAbility
+>
+>    USurvivorGameplayAbility <|-- USurvivorPassiveAbility
+>
+>    USurvivorGameplayAbility <|-- USurvivorUseItemAbility
+>
+>    class UItemGameplayAbility_Charge {
+>        +ChargeConsumptionPerSecond: float
+>        #ChargeConsumptionEffect: UGameplayEffect
+>        #OnCurrentItemChargeChanged(): void
+>    }
+>    USurvivorInteractionAbility <|-- UItemGameplayAbility_Charge
+>
+>    class USurvivorInteractionAbility자식클래스{
+>        UGA_SelfCare
+>        UGA_Survivor_RepairGenerator
+>        UGA_Survivor_Rescue
+>        UGA_Survivor_HealOther
+>        UGA_Survivor_OpenCabinet
+>        UGA_Toolbox_Sabotage
+>    }
+>    USurvivorInteractionAbility <|-- USurvivorInteractionAbility자식클래스
+>
+>    class UItemGameplayAbility_Charge자식클래스{
+>        UGA_MedKit_HealSelf
+>        UGA_MedKit_HealOther
+>        UGA_Toolbox_Repair
+>        UGA_Toolbox_Sabotage
+>    }
+>    UItemGameplayAbility_Charge <|-- UItemGameplayAbility_Charge자식클래스
+>
+>    USurvivorUseItemAbility <|-- UGA_UseFireCracker
+>
+>    class USurvivorGameplayAbility자식클래스{
+>        UGA_Survivor_Crouch
+>        UGA_Survivor_Drop
+>        UGA_Survivor_Sprint
+>    }
+>    USurvivorGameplayAbility <|-- USurvivorGameplayAbility자식클래스
+>
+>    class USurvivorPassiveAbility자식클래스{
+>        UGA_Survivor_Dying
+>        UGA_Survivor_HookedIn
+>        UGA_Survivor_CapturedByKiller
+>    }
+>    USurvivorPassiveAbility <|-- USurvivorPassiveAbility자식클래스
+>    ```
+###  🤝**상호작용 컴포넌트 (InteractorComponent)**
+*   `InteractableComponent`와 `InteractorComponent`로 이루어진 독립적인 상호작용 모듈 구현.
+*   커스텀 충돌 채널을 활용.
+*   발전기 수리, 동료 치료, 갈고리 파괴 등 다양한 상호작용 구현
+*   타이머를 활용하여 성능 최적화
+>   **📊시퀀스 다이어그램**
+>   ```mermaid
+>   sequenceDiagram
+>   participant SC as UInteractorComponent(Client)
+>   participant SS as UInteractorComponent(Server)
+>    participant IC as UInteractableComponent(Server)
+>    participant GAS as USurvivorInteractionAbility(Server)
+>    activate SS
+>    note over SS: BeginPlay
+>    SS->>SS: 타이머 시작
+>    loop 지정된 Interval마다 반복
+>        SS->>SS: CheckNearbyInteractable() 호출
+>        alt CurrentInteractable이 변경됨
+>            SS->>SC: RPC호출(변경사항 즉시 반영)
+>        end
+>    end
+>    activate GAS
+>    note over GAS: 자식 클래스에서
+>    GAS->>SS: InteractWithCurrentInteractable 호출
+>
+>    note over SS: InteractWithCurrentInteractable
+>    SS->>IC: Interface를 통해 StartInteraction 호출
+>    SS->>SS: 탐색 중지
+>    GAS->>SS: EndInteraction 호출
+>    SS->>IC: Interface를 통해 FinishInteraction 호출
+>    SS->>SS: 탐색 재개
+>   
+>    deactivate GAS
+>    deactivate SS
+>    ```
+###   ⏱️**스킬체크 컴포넌트 (Skill Check)**
+*   수리나 치료 중 무작위로 발생하는 QTE 시스템.
+*   성공/대성공/실패에 따른 진행도 보너스 및 페널티 적용
+>   **📊시퀀스 다이어그램**
+>   ```mermaid
+>   sequenceDiagram
+>   participant S as USkillCheckComponent
+>   participant GAC as USurvivorInteractionAbility(Client)
+>   participant GAS as USurvivorInteractionAbility(Server)
+>
+>    activate GAC
+>    note right of GAC: 자식 클래스의 ActivateAbility
+>    GAC->>GAC: SetRandomSkillCheckEnabledOnClient(float Frequency)  호출
+>    alt 어빌리티 활성화
+>        GAC->>S: SkillCheckEndDelegate에 가입
+>        note right of GAC: SetRandomSkillCheckEnabledOnClient
+>        GAC->>GAC: 스킬체크 타이머 시작(시간 랜덤)
+>        activate S
+>        GAC->>S: 타이머 발동 시 TriggerOneShotSkillCheck 호출
+>        S->>S: 스킬체크 미니게임 진행(Tick으로 타이밍 측정)
+>        note over GAC,S: 스킬체크 종료 루틴
+>        S->>GAC: 스킬체크 종료 후 Delegate로 결과값(ESkillCheckResult) 전달
+>        deactivate S
+>        GAC->GAS: RPC로 결과를 서버로 전달
+>    else 어빌리티 종료
+>        alt 스킬체크 진행중
+>            note over GAC,S: 스킬체크 종료 루틴
+>        end
+>    end
+>    deactivate GAC
+>    ```
+###   👁️**캐릭터 오라 시스템**
+*   CustomDepth를 활용하여 가려진 캐릭터의 실루엣을 표시하는 기능
+*   서브시스템에서 관리하여 오라 퍽을 갖는 클라이언트에만 표시
+*   캐릭터별 오라 정보를 중앙에서 관리하여 여러 퍽에 의한 오라가 중첩된 경우를 처리
+###   👣**생존자 발자국 시스템**
+*   달리는 생존자의 발자국을 살인마에게 보여주는 기능
+*   서브시스템을 이용해 살인마 클라이언트에만 표시 
+*   DecalComponent를 Actor에 붙여 스폰하되, 오브젝트 풀링으로 재사용하여 성능 최적화
 
 ## 📂 자료
 *   [📄 발표 PPT](https://drive.google.com/drive/folders/1GIwR3PEj1KsdwtcEwJnWt60qXxBfUbw3?usp=sharing)
@@ -350,4 +349,5 @@
 
 ## ⚠️ 참고 사항
 *   본 프로젝트는 학습 및 포트폴리오 목적으로 제작되었습니다.
+*   형상관리는 본 리포지토리가 아닌 별도의 Perforce 서버를 활용하여 진행되었습니다.
 *   저장소에는 Source Code만 포함되어 있으며, 에셋(Asset) 파일은 포함되어 있지 않습니다.
