@@ -117,8 +117,7 @@
     ASurvivorCharacter <..> ASurvivorItem
     ASurvivorItem *.. UItemAddonComponent
     ```
-    *   구급상자, 공구상자 등 아이템 장착, 버리기, 사용 구현.
-    *   아이템의 능력을 강화하는 애드온 구현
+
 *   **📊캐릭터 스폰 및 초기화 과정 시퀀스 다이어그램**
 
     ```mermaid
@@ -348,7 +347,7 @@
     *   달리는 생존자의 발자국을 살인마에게 보여주는 기능
     *   서브시스템을 이용해 살인마 클라이언트에만 표시 
     *   DecalComponent를 Actor에 붙여 스폰하되, 오브젝트 풀링으로 재사용하여 성능 최적화
-    
+
 ## 📂 자료
 *   [📄 발표 PPT](https://drive.google.com/drive/folders/1GIwR3PEj1KsdwtcEwJnWt60qXxBfUbw3?usp=sharing)
 *   [📺 시연 영상](https://youtu.be/ro7gwYu5df8)
