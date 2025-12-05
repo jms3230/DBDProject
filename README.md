@@ -207,10 +207,6 @@
     deactivate ASurvivorItem
     deactivate ASurvivorCharacter
     ```
-
-*   **상태 관리 (State Management)**
-    *   건강함(Normal) -> 부상(Injured) -> 빈사(Dying) -> 갈고리(Hooked) -> 사망(Dead)으로 이어지는 생명 주기 구현.
-    *   GameplayTag를 활용한 상태 체크, 애니메이션, 이벤트 처리.
 *   **Gameplay Ability System 활용 (GAS)**
     *   **GameplayTag**:  건강함(Normal), 부상(Injured), 빈사(Dying) 등 상태 체크, 애니메이션, 이벤트 처리.
     *   **GameplayAbility**: 상호작용(수리, 치료), 패시브(잡힘, 갈고리 걸림) 등 액션 모듈화.
