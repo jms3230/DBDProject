@@ -60,7 +60,9 @@
     ASurvivorCharacter->>ASurvivorCharacter: 서브시스템에 생존자 등록
     deactivate ASurvivorCharacter
     ```
-    * **퍽 초기화 과정 시퀀스 다이어그램(생존자, 살인마 공통)**
+     <details>
+    <summary> 퍽 초기화 과정 시퀀스 다이어그램(생존자, 살인마 공통)</summary>
+    
     ```mermaid
     sequenceDiagram
     participant ADBDCharacterServer as ADBDCharacter (Server)
@@ -89,7 +91,9 @@
     end
 
     ```
-    * **아이템 초기화 과정 시퀀스 다이어그램**
+    <details>
+    <summary>아이템 초기화 과정 시퀀스 다이어그램</summary>
+
     ```mermaid
     sequenceDiagram
     participant ASurvivorCharacter
