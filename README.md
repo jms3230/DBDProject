@@ -35,11 +35,11 @@
 
 ## 💡 주요 기능 (Key Features)
 ### 🏃‍♂️ 캐릭터 (생존자)
-*   **캐릭터 초기화 로직 (Character Creation)**
-    *   **캐릭터 스폰 및 초기화 과정 시퀀스 다이어그램**
-    <details>
-    <summary><b>📊캐릭터 스폰 및 초기화 과정 시퀀스 다이어그램</b></summary>
-    
+*   **캐릭터 및 로드아웃(장비) 시스템**
+    *   확장에 용이한 데이터 기반 캐릭터 관리 시스템
+    *   Modular Character 설계로 캐릭터 커스터마이징을 위한 기반 구조 구템템
+    *   다형성을 활용하여 기반 시스템 수정 없이 확장 가능
+*    **📊캐릭터 스폰 및 초기화 과정 시퀀스 다이어그램**
     ```mermaid
     sequenceDiagram
     participant ADBDGameMode
@@ -60,10 +60,8 @@
     ASurvivorCharacter->>ASurvivorCharacter: 서브시스템에 생존자 등록
     deactivate ASurvivorCharacter
     ```
-    </details>
-     <details>
-    <summary><b>📊퍽 초기화 과정 시퀀스 다이어그램(생존자, 살인마 공통)</b></summary>
     
+*    **📊퍽 초기화 과정 시퀀스 다이어그램(생존자, 살인마 공통)**
     ```mermaid
     sequenceDiagram
     participant ADBDCharacterServer as ADBDCharacter (Server)
@@ -92,10 +90,8 @@
     end
 
     ```
-    </details>
-    <details>
-    <summary><b>📊아이템 초기화 과정 시퀀스 다이어그램</b></summary>
-
+    
+*    **📊아이템 초기화 과정 시퀀스 다이어그램**
     ```mermaid
     sequenceDiagram
     participant ASurvivorCharacter
@@ -130,7 +126,7 @@
     deactivate ASurvivorItem
     deactivate ASurvivorCharacter
     ```
-    </details>
+
 *   **상태 관리 (State Management)**
     *   건강함(Normal) -> 부상(Injured) -> 빈사(Dying) -> 갈고리(Hooked) -> 사망(Dead)으로 이어지는 생명 주기 구현.
     *   GameplayTag를 사용하여 상태 체크 및 이벤트 처리.
