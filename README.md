@@ -40,7 +40,7 @@
     *   퍽(Perk), 아이템, 애드온으로 이루어진 로드아웃 시스템
     *   데이터테이블을 활용해 체계적으로 관리
     *   다형성을 활용하여 기반 시스템 수정 없이 확장 가능
-    *   **캐릭터 클래스 다이어그램**
+    *   📊**캐릭터 클래스 다이어그램**
     ```mermaid
     classDiagram
     ADBDCharacter <|-- ASurvivorCharacter
@@ -63,7 +63,7 @@
     }
     ```
     
-*   *   **퍽 클래스 다이어그램**
+    *   📊**퍽 클래스 다이어그램**
     ```mermaid
     classDiagram
     direction LR
@@ -92,7 +92,7 @@
     ADBDCharacter --> UPerkComponent
     UPerkComponent <|-- UPerkComponent자식클래스
     ```
-*   *   **아이템 & 애드온 클래스 다이어그램**
+    *   📊**아이템 & 애드온 클래스 다이어그램**
     ```mermaid
     classDiagram
     direction LR
