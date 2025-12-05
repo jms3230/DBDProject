@@ -36,10 +36,91 @@
 ## 💡 주요 기능 (Key Features)
 ### 🏃‍♂️ 캐릭터 (생존자)
 *   **캐릭터 및 로드아웃(장비) 시스템**
-    *   확장에 용이한 데이터 기반 캐릭터 관리 시스템
-    *   Modular Character 설계로 캐릭터 커스터마이징을 위한 기반 구조 구템템
+    *   Modular Character 설계로 캐릭터 커스터마이징을 위한 기반 구조 구현
+    *   퍽(Perk), 아이템, 애드온으로 이루어진 로드아웃 시스템
+    *   데이터테이블을 활용해 체계적으로 관리
     *   다형성을 활용하여 기반 시스템 수정 없이 확장 가능
-*    **📊캐릭터 스폰 및 초기화 과정 시퀀스 다이어그램**
+    *   **캐릭터 클래스 다이어그램**
+    ```mermaid
+    classDiagram
+    ADBDCharacter <|-- ASurvivorCharacter
+    ADBDCharacter <|-- AKillerCharacter
+    class ADBDCharacter{
+      +ServerSideInit() void*
+      +ClientSideInit() void*
+    }
+    class ASurvivorCharacter{
+      +PossessedBy(AController*) void*
+      +OnRep_PlayerState() void*
+      +ServerSideInit() void*
+      +ClientSideInit() void*
+    }
+    class AKillerCharacter{
+      +PossessedBy(AController*) void*
+      +OnRep_PlayerState() void*
+      +ServerSideInit() void*
+      +ClientSideInit() void*
+    }
+    ```
+    
+*   *   **퍽 클래스 다이어그램**
+    ```mermaid
+    classDiagram
+    direction LR
+    class ADBDCharacter {
+	    #AuthInitPerks() void
+	    #Client_UpdatePerk(UPerkComponent* ...) void
+    }
+
+    class UPerkComponent {
+	    +OnServerSideInitialized() void*
+	    +OnOwnerClientSideInitialized() void*
+    }
+
+    class UPerkComponent자식클래스{
+        UPerk_Adrenaline
+        UPerk_Bond
+        UPerk_BotanyKnowledge
+        UPerk_Empathy
+        UPerk_Leader
+        UPerk_ProveThyself
+        UPerk_QuickAndQuiet
+        UPerk_SelfCare
+        UPerk_SprintBurst
+    }
+
+    ADBDCharacter --> UPerkComponent
+    UPerkComponent <|-- UPerkComponent자식클래스
+    ```
+*   *   **아이템 & 애드온 클래스 다이어그램**
+    ```mermaid
+    classDiagram
+    direction LR
+    class ASurvivorCharacter {
+        +EquipItem(ASurvivorItem*) void
+        +DropItem(ASurvivorItem*) void
+    }
+    
+    class ASurvivorItem {
+        +OnInitialized() void
+        +OnEquipItem() void*
+        +OnDropItem() void*
+        #Addon1: UItemAddonComponent#42;
+        #Addon2: UItemAddonComponent#42;
+    }
+
+    class UItemAddonComponent{
+      +OnEquip() void
+      +OnUnEquip() void
+      +OnInitialized() void
+    }
+    ASurvivorCharacter <..> ASurvivorItem
+    ASurvivorItem *.. UItemAddonComponent
+    ```
+    *   구급상자, 공구상자 등 아이템 장착, 버리기, 사용 구현.
+    *   아이템의 능력을 강화하는 애드온 구현
+*   **📊캐릭터 스폰 및 초기화 과정 시퀀스 다이어그램**
+
     ```mermaid
     sequenceDiagram
     participant ADBDGameMode
@@ -61,7 +142,8 @@
     deactivate ASurvivorCharacter
     ```
     
-*    **📊퍽 초기화 과정 시퀀스 다이어그램(생존자, 살인마 공통)**
+*   **📊퍽 초기화 과정 시퀀스 다이어그램(생존자, 살인마 공통)**
+
     ```mermaid
     sequenceDiagram
     participant ADBDCharacterServer as ADBDCharacter (Server)
@@ -91,7 +173,7 @@
 
     ```
     
-*    **📊아이템 초기화 과정 시퀀스 다이어그램**
+*   **📊아이템 초기화 과정 시퀀스 다이어그램**
     ```mermaid
     sequenceDiagram
     participant ASurvivorCharacter
@@ -129,11 +211,10 @@
 
 *   **상태 관리 (State Management)**
     *   건강함(Normal) -> 부상(Injured) -> 빈사(Dying) -> 갈고리(Hooked) -> 사망(Dead)으로 이어지는 생명 주기 구현.
-    *   GameplayTag를 사용하여 상태 체크 및 이벤트 처리.
-    *   각 상태에 따른 이동 속도 변화 및 애니메이션 처리.
-*   **Gameplay Ability System (GAS)**
-    *   **AttribteSet**: 체력, 이동 속도, 수리/치료 속도 등 캐릭터 스탯 관리.
-    *   **GameplayAbility**: 달리기(Sprint), 치료(Heal), 수리(Repair) 등 액션의 모듈화.
+    *   GameplayTag를 활용한 상태 체크, 애니메이션, 이벤트 처리.
+*   **Gameplay Ability System 활용 (GAS)**
+    *   **GameplayTag**:  건강함(Normal), 부상(Injured), 빈사(Dying) 등 상태 체크, 애니메이션, 이벤트 처리.
+    *   **GameplayAbility**: 상호작용(수리, 치료), 패시브(잡힘, 갈고리 걸림) 등 액션 모듈화.
     *   **GameplayEffect**: 아이템/퍽 효과 적용 및 상태 이상(Buff/Debuff) 처리.
     *   **GameplayAbility 클래스 다이어그램**
     ```mermaid
@@ -197,6 +278,7 @@
     *   `InteractableComponent`와 `InteractorComponent`로 이루어진 독립적인 상호작용 모듈 구현.
     *   커스텀 충돌 채널을 활용.
     *   발전기 수리, 동료 치료, 갈고리 파괴 등 다양한 상호작용 구현
+    *   타이머를 활용하여 성능 최적화
     *   **InteractorComponent 동작 시퀀스 다이어그램**
     ```mermaid
     sequenceDiagram
@@ -229,7 +311,7 @@
     ```
 *   **스킬체크 컴포넌트 (Skill Check)**
     *   수리나 치료 중 무작위로 발생하는 QTE 시스템.
-    *   성공/대성공/실패에 따른 진행도 보너스 및 페널티 적용.
+    *   성공/대성공/실패에 따른 진행도 보너스 및 페널티 적용
     *   **스킬체크 동작 시퀀스 다이어그램**
     ```mermaid
     sequenceDiagram
@@ -258,46 +340,15 @@
     end
     deactivate GAC
     ```
-*   **퍽 (Perk) 시스템**
-    *   Dead by Daylight의 주요 퍽 구현 (Adrenaline, Sprint Burst, Self Care, Bond 등).
-    *   다형성을 활용하여 확장성 확보
-    *   **퍽 클래스 다이어그램**
-    ```mermaid
-    classDiagram
-    direction TB
-    class ADBDCharacter {
-	    #AuthInitPerks() void
-	    #Client_UpdatePerk(UPerkComponent* ...) void
-    }
-
-    class UPerkComponent {
-	    +OnServerSideInitialized() void*
-	    +OnOwnerClientSideInitialized() void*
-    }
-
-    class UPerkComponent자식클래스{
-        UPerk_Adrenaline
-        UPerk_Bond
-        UPerk_BotanyKnowledge
-        UPerk_Empathy
-        UPerk_Leader
-        UPerk_ProveThyself
-        UPerk_QuickAndQuiet
-        UPerk_SelfCare
-        UPerk_SprintBurst
-    }
-
-    ADBDCharacter --> UPerkComponent
-    UPerkComponent <|-- UPerkComponent자식클래스
-    ```
-*   **아이템 & 애드온**
-    *   구급상자, 공구상자 등 아이템 장착, 버리기, 사용 구현.
-    *   아이템의 능력을 강화하는 애드온 구현
 *   **캐릭터 오라 시스템**
-    *   서브시스템을 활용한 구현
+    *   CustomDepth를 활용하여 가려진 캐릭터의 실루엣을 표시하는 기능
+    *   서브시스템에서 관리하여 오라 퍽을 갖는 클라이언트에만 표시
+    *   캐릭터별 오라 정보를 중앙에서 관리하여 여러 퍽에 의한 오라가 중첩된 경우를 처리
 *   **생존자 발자국 시스템**
-    *   **Object Pooling**: `ScratchMark`(발자국)와 같이 빈번하게 생성/삭제되는 객체에 풀링 시스템 적용하여 성능 최적화
-
+    *   달리는 생존자의 발자국을 살인마에게 보여주는 기능
+    *   서브시스템을 이용해 살인마 클라이언트에만 표시 
+    *   DecalComponent를 Actor에 붙여 스폰하되, 오브젝트 풀링으로 재사용하여 성능 최적화
+    
 ## 📂 자료
 *   [📄 발표 PPT](https://drive.google.com/drive/folders/1GIwR3PEj1KsdwtcEwJnWt60qXxBfUbw3?usp=sharing)
 *   [📺 시연 영상](https://youtu.be/ro7gwYu5df8)
