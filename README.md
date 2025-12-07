@@ -1,6 +1,6 @@
 # DBDProject (Dead by Daylight 모작)
 
-[![Video Label](http://img.youtube.com/vi/ro7gwYu5df8/0.jpg)](https://youtu.be/ro7gwYu5df8)
+[![Video Label](http://img.youtube.com/vi/Mh9_ZfwXtZ0/0.jpg)](https://youtu.be/Mh9_ZfwXtZ0)
 
 ## 📝 프로젝트 소개
 멀티플레이어 PVP 게임 **Dead by Daylight**를 모작한 프로젝트입니다.  
@@ -9,10 +9,10 @@
 ## 👥 팀원 및 역할
 | 이름 | 역할 | 담당 파트 |
 |:---:|:---:|:---|
-| **정민수 (팀장)** | **Survivor** | **생존자 캐릭터, 상호작용 시스템, 퍽 시스템, 캐릭터 오라 및 발자국 시스템** |
-| 모명준 | Object | 로비, 게임 플로우, 오브젝트, 상호작용 시스템, 오브젝트 오라 시스템 |
-| 김미진 | Killer | 살인마 캐릭터, UI 베이스 설계 |
-| 유호근 | Map | 맵 랜덤 생성 시스템, 라이팅 |
+| **정민수 (팀장)** | **Survivor** | **생존자 캐릭터** |
+| 모명준 | Object | 게임 플로우, 오브젝트 |
+| 김미진 | Killer | 살인마 캐릭터 |
+| 유호근 | Map | 맵  |
 
 ## 📅 제작 기간
 *   **2025.09.01 - 2025.11.06**
