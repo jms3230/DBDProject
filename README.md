@@ -343,10 +343,6 @@
 *   서브시스템을 이용해 살인마 클라이언트에만 표시 
 *   DecalComponent를 Actor에 붙여 스폰하되, 오브젝트 풀링으로 재사용하여 성능 최적화
 
-## 📂 자료
-*   [📄 발표 PPT](https://drive.google.com/drive/folders/1GIwR3PEj1KsdwtcEwJnWt60qXxBfUbw3?usp=sharing)
-*   [📺 시연 영상](https://youtu.be/ro7gwYu5df8)
-
 ## ⚠️ 참고 사항
 *   본 프로젝트는 학습 및 포트폴리오 목적으로 제작되었습니다.
 *   형상관리는 본 리포지토리가 아닌 별도의 Perforce 서버를 활용하여 진행되었습니다.
