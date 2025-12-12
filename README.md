@@ -1,6 +1,6 @@
 # Dead by Daylight 모작 프로젝트
 
-[![Video Label](http://img.youtube.com/vi/ro7gwYu5df8/0.jpg)](https://youtu.be/ro7gwYu5df8)
+[![Video Label](http://img.youtube.com/vi/Mh9_ZfwXtZ0/0.jpg)](https://youtu.be/Mh9_ZfwXtZ0)
 
 
 ## 목차
@@ -26,9 +26,9 @@
 
 이 프로젝트는 멀티플레이어 PVP 게임 **Dead by Daylight**를 모작하여 구현한 팀 프로젝트입니다.  
 **Unreal Engine 5**와 <b>C++</b>를 기반으로 개발되었으며, **Dedicated Server** 환경에서 동작하도록 설계되었습니다.  
-특히 <b>Gameplay Ability System (GAS)</b>을 활용하여 캐릭터의 스킬, 상태 이상, 상호작용 시스템을 확장성 있는 객체 지향 구조로 구현하는 데 중점을 두었습니다.
+특히 <b>Gameplay Ability System (GAS)</b>을 활용하여 캐릭터의 스킬, 상태 이상, 상호작용 시스템을 확장성 있는 객체 지향적 구조로 구현하는 데 중점을 두었습니다.
 
-저는 이 프로젝트에서 **팀장 및 생존자 캐릭터 개발**을 맡아 **캐릭터의 전체 구조 설계 및 구현**,**퍽 시스템 구현**, **공용 상호작용 시스템**, **GAS 기반 어빌리티 시스템** 구축을 전담했습니다.
+저는 이 프로젝트에서 **팀장 및 생존자 캐릭터 개발**을 맡아 **캐릭터의 전체 구조 설계 및 구현**,**퍽 시스템 구현**, **공용 상호작용 시스템**, **GAS 기반 어빌리티 시스템**에 기여하였습니다.
 
 ---
 
