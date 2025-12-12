@@ -18,16 +18,6 @@ AItem_ChineseFireCracker::AItem_ChineseFireCracker()
 	ItemTag = DBDGameplayTags::Survivor_Item_FireCracker;
 }
 
-void AItem_ChineseFireCracker::OnEquipItem()
-{
-	Super::OnEquipItem();
-}
-
-void AItem_ChineseFireCracker::OnInitialized_Implementation()
-{
-	Super::OnInitialized_Implementation();
-}
-
 void AItem_ChineseFireCracker::OnStartUsingItem()
 {
 	Super::OnStartUsingItem();
@@ -63,8 +53,7 @@ void AItem_ChineseFireCracker::Explode()
 			ASInterface->GetAbilitySystemComponent());
 		if (ASC)
 		{
-			ItemAbilitySystemComponent->BP_ApplyGameplayEffectToTarget(
-				UGE_GrantBlindTagForDuration::StaticClass(), ASC, 0, ItemAbilitySystemComponent->MakeEffectContext());
+			ASC->BP_ApplyGameplayEffectToSelf(UGE_GrantBlindTagForDuration::StaticClass(), 0, ASC->MakeEffectContext());
 		}
 	}
 	SetActorEnableCollision(false);

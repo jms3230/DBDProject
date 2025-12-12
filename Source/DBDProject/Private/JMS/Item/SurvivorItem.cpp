@@ -66,10 +66,6 @@ void ASurvivorItem::OnInitialized_Implementation()
 
 void ASurvivorItem::OnEquipItem()
 {
-	// ItemAbilitySystemComponent->InitAbilityActorInfo(this, this);
-	// ItemAbilitySystemComponent->SetNumericAttributeBase(UItemAttributeSet::GetMaxChargeAttribute(), MaxCharge);
-	// ItemAbilitySystemComponent->SetNumericAttributeBase(UItemAttributeSet::GetCurrentChargeAttribute(),
-	//                                                     CurrentCharge);
 	GetOwnerSurvivorAbilitySystemComponent()->SetNumericAttributeBase(
 		USurvivorAttributeSet::GetMaxItemChargeAttribute(), MaxCharge);
 	GetOwnerSurvivorAbilitySystemComponent()->SetNumericAttributeBase(
@@ -102,10 +98,6 @@ void ASurvivorItem::OnStartUsingItem()
 
 void ASurvivorItem::OnEndUsingItem()
 {
-	// for (TSubclassOf<UGameplayAbility> UseItemAbilityClass : UseItemAbilities)
-	// {
-	// 	ItemAbilitySystemComponent->CancelAbility(UseItemAbilityClass.GetDefaultObject());
-	// }
 }
 
 void ASurvivorItem::OnDropItem()
@@ -166,46 +158,13 @@ void ASurvivorItem::AddCurrentCharge(float Amount)
 	CurrentCharge += Amount;
 }
 
-// 오류시 더 앞쪽으로 이동
 void ASurvivorItem::BeginPlay()
 {
 	Super::BeginPlay();
 	SetReplicates(true);
 	SetReplicateMovement(true);
-	// if (HasAuthority())
-	// {
-	// 	for (TSubclassOf<UGameplayAbility> UseItemAbilityClass : UseItemAbilities)
-	// 	{
-	// 		GrantedSpecHandles.Add(
-	// 			ItemAbilitySystemComponent->GiveAbility(FGameplayAbilitySpec(UseItemAbilityClass, 0)));
-	// 	}
-	// }
 }
 
-void ASurvivorItem::Tick(float DeltaTime)
-{
-	Super::Tick(DeltaTime);
-	// FString AbilityListString = "";
-	// for (auto ActivatableAbility : GetAbilitySystemComponent()->GetActivatableAbilities())
-	// {
-	// 	AbilityListString += ActivatableAbility.GetDebugString();
-	// 	AbilityListString += " ";
-	// }
-	// FString DebugString = FString::Printf(TEXT("Activatable Abilities: %s"), *AbilityListString);
-
-	// for (FGameplayAbilitySpecHandle Handle : GrantedSpecHandles)
-	// {
-	// 	DebugString += Handle.ToString();
-	// }
-	// if (HasAuthority())
-	// {
-	// 	Debug::DebugStringWithNetMode(this, DebugString, GetActorLocation() + FVector(0, 0, 50), DeltaTime);
-	// }
-	// else
-	// {
-	// 	Debug::DebugStringWithNetMode(this, DebugString, GetActorLocation() + FVector(0, 0, 70), DeltaTime);
-	// }
-}
 
 USurvivorAbilitySystemComponent* ASurvivorItem::GetOwnerSurvivorAbilitySystemComponent()
 {

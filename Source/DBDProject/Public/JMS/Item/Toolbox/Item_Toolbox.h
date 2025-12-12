@@ -18,11 +18,6 @@ class DBDPROJECT_API AItem_Toolbox : public ASurvivorItem
 	GENERATED_BODY()
 public:
 	AItem_Toolbox();
-	virtual void OnEquipItem() override;
-	virtual void OnInitialized_Implementation() override;
-	virtual void OnStartUsingItem() override;
-	virtual void OnEndUsingItem() override;
-
 	FORCEINLINE float GetRepairSpeedMultiplier() const
 	{
 		return RepairSpeedMultiplier;
@@ -42,15 +37,9 @@ public:
 	{
 		SabotageSpeedMultiplier += Amount;
 	}
-protected:
-	virtual void BeginPlay() override;
+private:
 	UPROPERTY(EditDefaultsOnly)
 	float RepairSpeedMultiplier = 1.5f;
 	UPROPERTY(EditDefaultsOnly)
 	float SabotageSpeedMultiplier = 1.15f;
-private:
-	UPROPERTY()
-	UToolboxAttributeSet* ToolboxAttributeSet;
-	
-	
 };

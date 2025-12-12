@@ -16,10 +16,6 @@ class DBDPROJECT_API AItem_MedKit : public ASurvivorItem
 	GENERATED_BODY()
 public:
 	AItem_MedKit();
-	virtual void OnEquipItem() override;
-	virtual void OnInitialized_Implementation() override;
-	virtual void OnStartUsingItem() override;
-	virtual void OnEndUsingItem() override;
 	FORCEINLINE float GetNerfSelfHealSpeedMultiplier() const
 	{
 		return NerfSelfHealSpeedMultiplier;
@@ -37,13 +33,6 @@ public:
 		BuffHealSpeedMultiplier += Amount;
 	}
 protected:
-	virtual void BeginPlay() override;
 	float NerfSelfHealSpeedMultiplier = 0.67f;
 	float BuffHealSpeedMultiplier = 1.4f;
-private:
-	UPROPERTY()
-	UMedkitAttributeSet* MedkitAttributeSet;
-	
-	
-	
 };

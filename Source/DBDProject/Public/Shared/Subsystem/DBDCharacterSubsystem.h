@@ -92,7 +92,7 @@ private:
 
 	TArray<FTimerHandle> AuraConditionTimerHandles;
 	float AuraConditionCheckInterval = 0.1f;
-	void ShowAuraAfterCheckSurvivorDistanceAndTag(UObject* AuraInstigator, ADBDCharacter* EffectOwner, float Distance,
+	void UpdateAuraInfo(UObject* AuraInstigator, ADBDCharacter* EffectOwner, float Distance,
 	                                              FGameplayTagContainer RequiredTags,
 	                                              FGameplayTagContainer BlockedTags);
 	// JMS : ~EnableSurvivorAuraWithDistanceAndTag 구현을 위한 멤버들

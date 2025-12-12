@@ -22,7 +22,7 @@ class UItemAddonComponent;
  */
 
 UCLASS()
-class DBDPROJECT_API ASurvivorItem : public AActor, public IInteractable, public IAbilitySystemInterface
+class DBDPROJECT_API ASurvivorItem : public AActor, public IInteractable
 {
 	GENERATED_BODY()
 
@@ -38,14 +38,6 @@ protected:
 
 	UPROPERTY(VisibleAnywhere, Category = "Interactable")
 	UItemInteractableComponent* ItemInteractableComponent;
-
-	UPROPERTY(VisibleAnywhere, Category = "Interactable")
-	UItemAbilitySystemComponent* ItemAbilitySystemComponent;
-
-public:
-	UPROPERTY()
-	UItemAttributeSet* ItemAttributeSet;
-
 protected:
 	UPROPERTY(VisibleAnywhere, Category = "Addon")
 	UItemAddonComponent* Addon1;
@@ -58,8 +50,6 @@ protected:
 public:
 	// IInteractable
 	virtual UInteractableComponent* GetInteractableComponent() const override;
-	// IAbilitySystemInterface
-	virtual UAbilitySystemComponent* GetAbilitySystemComponent() const override;
 
 	void AttachAddon1(UItemAddonComponent* InAddon1);
 	void AttachAddon2(UItemAddonComponent* InAddon2);
@@ -85,7 +75,6 @@ public:
 	void AddCurrentCharge(float Amount);
 protected:
 	virtual void BeginPlay() override;
-	virtual void Tick(float DeltaTime) override;
 	USurvivorAbilitySystemComponent* GetOwnerSurvivorAbilitySystemComponent();
 	ASurvivorCharacter* GetOwnerSurvivor();
 	UPROPERTY(EditDefaultsOnly, Category = "Item")

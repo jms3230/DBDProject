@@ -19,7 +19,7 @@ public:
 	virtual void OnServerSideInitialized() override;
 	virtual void OnOwnerClientSideInitialized() override;
 	
-protected:
+private:
 	UPROPERTY(EditDefaultsOnly)
 	TSubclassOf<UGameplayEffect> LeaderEffect;
 	

@@ -20,15 +20,15 @@ private:
 	virtual void AuthApplyGameplayEffect(TSubclassOf<UGameplayEffect> GameplayEffect, int level);
 public:
 	UDBDAbilitySystemComponent();
-
 	virtual void ServerSideInit();
+protected:
 	virtual void InitializeBaseAttributes()PURE_VIRTUAL(UDBDAbilitySystemComponent::InitializeBaseAttributes,);
-		
+	virtual void GrantInputAbilities()PURE_VIRTUAL(UDBDAbilitySystemComponent::GrantInputAbilities,);
 	UPROPERTY(EditDefaultsOnly, Category = "DataControl")
 	UDA_DBDASCData* DBDASCData;
 
+private:
 	virtual void OperatingInitializedAbilities();
 	virtual void ApplyInitializeEffects();
-	virtual void GrantInputAbilities()PURE_VIRTUAL(UDBDAbilitySystemComponent::GrantInputAbilities,);
 
 };

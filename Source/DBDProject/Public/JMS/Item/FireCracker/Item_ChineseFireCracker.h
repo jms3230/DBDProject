@@ -17,9 +17,6 @@ class DBDPROJECT_API AItem_ChineseFireCracker : public ASurvivorItem
 public:
 	AItem_ChineseFireCracker();
 public:
-	
-	virtual void OnEquipItem() override;
-	virtual void OnInitialized_Implementation() override;
 	virtual void OnStartUsingItem() override;
 	UPROPERTY(EditDefaultsOnly, Category = "FireCracker")
 	float ExplodeDelay = 2.f;

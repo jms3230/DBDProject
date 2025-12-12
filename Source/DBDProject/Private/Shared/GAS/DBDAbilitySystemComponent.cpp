@@ -28,7 +28,6 @@ void UDBDAbilitySystemComponent::ServerSideInit()
 
 void UDBDAbilitySystemComponent::OperatingInitializedAbilities()
 {
-	// 서버에서만 수행
 	if (!GetOwner() || !GetOwner()->HasAuthority())
 	{
 		return;
@@ -38,7 +37,6 @@ void UDBDAbilitySystemComponent::OperatingInitializedAbilities()
 		for (const TSubclassOf<UGameplayAbility>& GAClass : DBDASCData->InitializedAbilities)
 		{
 			FGameplayAbilitySpec Spec = FGameplayAbilitySpec(GAClass, 1, INDEX_NONE, nullptr);
-			// 어빌리티 부여 및 한 번만 실행
 			GiveAbilityAndActivateOnce(Spec, nullptr);
 		}
 
@@ -47,14 +45,11 @@ void UDBDAbilitySystemComponent::OperatingInitializedAbilities()
 			GiveAbility(FGameplayAbilitySpec(GAClass, 1, INDEX_NONE, nullptr));
 		}
 	}
-
-
 	GrantInputAbilities();
 }
 
 void UDBDAbilitySystemComponent::ApplyInitializeEffects()
 {
-	// 서버에서만 수행
 	if (!GetOwner() || !GetOwner()->HasAuthority())
 	{
 		return;
@@ -62,10 +57,7 @@ void UDBDAbilitySystemComponent::ApplyInitializeEffects()
 
 	for (const TSubclassOf<UGameplayEffect>& GEClass : DBDASCData->InitialEffects)
 	{
-		// GE Spec Handle 생성
 		FGameplayEffectSpecHandle EffectSpecHandle = MakeOutgoingSpec(GEClass, 1, MakeEffectContext());
-
-		// 자신에게 GE적용
 		ApplyGameplayEffectSpecToSelf(*EffectSpecHandle.Data.Get());
 	}
 }

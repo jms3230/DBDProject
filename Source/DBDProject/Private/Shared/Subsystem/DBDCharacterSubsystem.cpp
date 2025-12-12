@@ -166,7 +166,7 @@ void UDBDCharacterSubsystem::EnableSurvivorAuraWithDistanceAndTag(UObject* AuraI
                                                                   FGameplayTagContainer BlockedTags)
 {
 	FTimerDelegate TimerDelegate;
-	TimerDelegate.BindUObject(this, &UDBDCharacterSubsystem::ShowAuraAfterCheckSurvivorDistanceAndTag, AuraInstigator,
+	TimerDelegate.BindUObject(this, &UDBDCharacterSubsystem::UpdateAuraInfo, AuraInstigator,
 	                          EffectOwner,
 	                          Distance,
 	                          RequiredTags, BlockedTags);
@@ -231,7 +231,7 @@ void UDBDCharacterSubsystem::RefreshAura()
 	}
 }
 
-void UDBDCharacterSubsystem::ShowAuraAfterCheckSurvivorDistanceAndTag(UObject* AuraInstigator,
+void UDBDCharacterSubsystem::UpdateAuraInfo(UObject* AuraInstigator,
                                                                       ADBDCharacter* EffectOwner, float Distance,
                                                                       FGameplayTagContainer RequiredTags,
                                                                       FGameplayTagContainer BlockedTags)

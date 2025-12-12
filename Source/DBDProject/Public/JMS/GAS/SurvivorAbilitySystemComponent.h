@@ -13,7 +13,7 @@ class DBDPROJECT_API USurvivorAbilitySystemComponent : public UDBDAbilitySystemC
 {
 	GENERATED_BODY()
 
-public:
+private:
 	
 	virtual void GrantInputAbilities() override;
 	
@@ -21,9 +21,4 @@ public:
 
 	UPROPERTY(EditDefaultsOnly, Category = "DataControl")
 	UDA_SurvivorASCData* SurvivorASCData;
-
-	// Priority로 Ability 활성화 - 미사용중
-	void ActivatePriorityAbilityByTag(FGameplayTag Tag);
-protected:
-	TArray<FGameplayAbilitySpec*> FilterHighestPriorityAbilities(const TArray<FGameplayAbilitySpec*>& InAbilitySpecs) const;
 };
