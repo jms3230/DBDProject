@@ -339,13 +339,7 @@ classDiagram
         +OnServerSideInitialized()
     }
     
-    UPerkComponent <|-- UPerk_SprintBurst
-    UPerkComponent <|-- UPerk_SelfCare
-    UPerkComponent <|-- UPerk_BotanyKnowledge
-    UPerkComponent <|-- UPerk_Adrenaline
-    UPerkComponent <|-- UPerk_Bond
-    UPerkComponent <|-- UPerk_Empathy
-    UPerkComponent <|-- UPerk_ProveThyself
+    UPerkComponent <|-- UPerk_자식클래스
 ```
 ---
 
