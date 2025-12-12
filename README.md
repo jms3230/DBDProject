@@ -292,7 +292,7 @@ sequenceDiagram
 
 ```mermaid
 classDiagram
-    direction TB
+    direction LR
     
     class UPerkComponent {
         <<abstract>>
