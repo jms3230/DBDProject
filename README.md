@@ -539,15 +539,15 @@ sequenceDiagram
     
     Note over Component: Timer: 0.1초마다 주변 탐색
     Component->>Component: CheckNearbyInteractable()
-    Component->>Component: SphereTrace(TraceChannel_Interaction)
+    Component->>Component: SphereTrace(충돌 전용 채널)
     
     alt 상호작용 대상 발견
         Component->>Component: 거리 계산 및 최근접 선택
-        Component->>Client: RPC_CurrentInteractableChanged(Target)
-        Client->>Client: UI 상호작용 키 표시 (E)
+        Component->>Client: RPC: CurrentInteractableChanged(Target)
+        Client->>Client: UI 상호작용 키 표시
     end
     
-    Note over Client: 플레이어 입력: E 키
+    Note over Client: 플레이어 입력: 상호작용 키
     Client->>ASC: TryActivateAbilityByTag(Interaction Tag)
     ASC->>Component: InteractWithCurrentInteractable()
     Component->>Interface: StartInteraction(Interactor)
