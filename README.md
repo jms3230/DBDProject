@@ -542,7 +542,7 @@ sequenceDiagram
     end
     
     Note over Client: 플레이어 입력: 상호작용 키
-    Client->>ASC: TryActivateAbilityByTag(Interaction Tag)
+    Client->>ASC: TryActivateAbility : InputID에 의해
     ASC->>Component: InteractWithCurrentInteractable()
     Component->>Interface: StartInteraction(Interactor)
     Interface->>Interface: 상호작용 로직 실행 (발전기 수리 등)
