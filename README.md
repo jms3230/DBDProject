@@ -248,7 +248,7 @@ sequenceDiagram
     note over Subsystem : Request Aura Refresh : 모든 생존자 AuraInfo 체크(클라이언트 당 1번만 발동)
     Subsystem->>Subsystem: RequestAuraRefresh
     
-    loop Every AuraConditionCheckInterval
+    loop 조건 체크 Interval
         Subsystem->>Subsystem: UpdateAuraInfo()
         alt 조건 충족
             Subsystem->>Subsystem: AuraInstigator추가
@@ -257,7 +257,7 @@ sequenceDiagram
         end
     end
 
-    loop Every AuraRefreshInterval
+    loop 오라 리프레시 Interval
         Subsystem->>Subsystem: RefreshAura()
         
         alt AuraInstigators > 0
